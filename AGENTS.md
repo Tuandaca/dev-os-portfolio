@@ -4,6 +4,7 @@
 - Use actual Cursor subagent delegation, not roleplay. Delegate only independent, worthwhile tasks with nonoverlapping file ownership. The main agent coordinates at most four subagents: **five concurrent agents total, including the main agent**.
 - The architect is the primary coordination role among the custom agents: it plans architecture, task boundaries, and suggested assignments. It must not delegate to itself or ask another agent to create a new architect. Only the main agent spawns agents, assigns work, and integrates results.
 - Preserve existing code and user changes. Agree on file ownership before parallel edits; use isolated worktrees for independent Git work where appropriate.
+- Work on `main` as the sole active branch. Do not create or push feature branches unless the owner changes this instruction.
 - Keep concise checkpoints in `docs/PROGRESS.md` and task states in `docs/TASKS.md`. Record verified results and blockers without inventing completion evidence.
 - Verify changes before marking tasks complete. Use targeted tests, a production build for app changes, and concise handoffs with files changed and checks run. Avoid unnecessary token consumption.
 - Never fabricate portfolio facts, metrics, employers, dates, or project outcomes. Treat legacy data as unverified until backed by source evidence or the owner.

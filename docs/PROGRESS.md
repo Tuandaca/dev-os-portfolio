@@ -2,7 +2,7 @@
 
 ## Current phase
 
-Phase 3 recruiter content and case studies complete locally (2026-11-01). Synchronization to the verified public `main` branch is in progress.
+Phase 3 recruiter content and case studies are synchronized to the verified public `main` branch (2026-11-01). No deployment was performed.
 
 ## Completed features
 
@@ -17,7 +17,7 @@ Phase 3 recruiter content and case studies complete locally (2026-11-01). Synchr
 
 ## Active task IDs
 
-- P3-S01 — fast-forward verified Phase 2/3 history to `main`, verify, and push without force. Phase 4 optional cinematic work remains TODO.
+- None. Phase 4 optional cinematic work remains TODO.
 
 ## Decisions
 
@@ -28,6 +28,7 @@ Phase 3 recruiter content and case studies complete locally (2026-11-01). Synchr
 - The owner approved publishing the original CV including its contact details. Do not substitute legacy contact data.
 - The Travel AI repository has apparent exposed credentials. Keep its project link off the website until owner review and credential rotation; present safe CV and code facts without quoting secrets.
 - The owner confirmed that “Multimodal RAG Q&A System” names the same project as the CV's Travel AI capstone. This confirms identity, not a multimodal retrieval implementation.
+- The owner requested one working branch: `main`. Feature branches were fast-forwarded into `main` and their merged local branch pointers removed; future work stays on `main` unless the owner changes this instruction.
 - The existing `tuandacadev.vercel.app` portfolio returned HTTP 200, but it is not verified as the DEV.OS deployment. Keep page-specific SEO titles/descriptions and Open Graph metadata; defer canonical URLs and a deployment sitemap until the DEV.OS public URL is known.
 - Keep recruiter routes server-rendered and directly addressable. Treat the workspace and cinematic scene as progressive enhancements over the same typed content.
 - Defer R3F, Drei, React Flow, MDX, GSAP, and any Motion package migration until their corresponding implementation needs. Playwright was added for Phase 3 browser behavior. React 19.3.1 and Three 0.173.0 fit the checked Fiber 9.8.2/Drei 10.7.9 peer ranges; install-time verification is still required.
@@ -46,6 +47,7 @@ Phase 3 recruiter content and case studies complete locally (2026-11-01). Synchr
 - The website PDF hash `2F7154E6…F10880A` matches the supplied English CV byte-for-byte. GitHub profile and existing portfolio URLs returned HTTP 200. Email and telephone remain CV-supplied values, not delivery-tested. Business v1's repository-listed demo returned HTTP 200 with a matching business-site title.
 - Recruiter QA passed two content invariants and five browser journeys: seven main routes, navigation, four slugs with nine headings, unknown-slug 404, Travel/v2 link withholding, Gym TODO labels, PDF download event and SHA256, and 320px overflow checks. No implementation blocker reported.
 - Full integration: `npm run lint`, `npm run typecheck`, `npm test` (14 passing across five files), `npm run test:e2e` (11 passing across recruiter and workspace journeys), and `npm run build` passed. The build generated 15 static pages, including Cinema, Travel AI, GymLVL, and Business Websites; `/workspace` remains server-rendered on demand.
+- P3-S01 synchronization rerun: lint and typecheck passed; 14 Vitest and 11 Playwright tests passed; production build passed with 15 generated static pages and `/workspace` rendered on demand. `git diff --check` and credential-pattern scan of changed files passed before the push.
 
 ## Git state
 
@@ -56,11 +58,11 @@ Phase 3 recruiter content and case studies complete locally (2026-11-01). Synchr
 - The design specification work starts from clean local branch `codex/phase2-design` at `353f16c`, preserving the CV content commit. No design changes have been pushed or deployed.
 - Phase 2 design branch `codex/phase2-design` ends at local commit `46e1d65` (`docs: specify DEV.OS architecture and visual foundations`); it has not been pushed or deployed.
 - Phase 2 audit confirmed clean `46e1d65`, the approved tokens/primitives/routes, and no Phase 2 scope drift. `gh auth status` confirms Tuandaca; `gh repo view` confirms the public `Tuandaca/dev-os-portfolio` repository with default `main`. Only local `main` tracks `origin/main`; the new `codex/phase3-core` branch has no upstream. No push or merge is authorized for this audit.
-- Current branch `codex/phase3-core` starts at `46e1d65` and has no upstream. The local Phase 3 commit is titled `feat: build DEV.OS core workspace`; neither Phase 2 nor Phase 3 branches were pushed or merged. Verified remote `main` remains `9f319750583faa62f9a1e3eb56fb35376fb45418` at the public `Tuandaca/dev-os-portfolio` repository.
+- At the Phase 3 core checkpoint, `codex/phase3-core` started at `46e1d65` and had no upstream. Its local implementation commit was titled `feat: build DEV.OS core workspace`; remote `main` was then at `9f319750583faa62f9a1e3eb56fb35376fb45418`.
 - A local docs checkpoint titled `docs: record Phase 3 browser verification` records the full six-test browser rerun after the workspace commit; it has no remote push.
-- Recruiter content work starts from clean local `codex/phase3-portfolio-content` at `e7f4880`. No push, merge, or deployment is planned in this checkpoint.
-- The recruiter content phase is recorded in a local commit titled `feat: complete sourced recruiter portfolio`; this branch has no upstream and has not been pushed, merged, or deployed.
+- The recruiter content work started from clean local `codex/phase3-portfolio-content` at `e7f4880`; its implementation commit is `e583f9e` (`feat: complete sourced recruiter portfolio`).
 - P3-S01 preflight: clean `codex/phase3-portfolio-content` at `e583f9e`; `gh auth status` confirms Tuandaca; `gh repo view` confirms public `Tuandaca/dev-os-portfolio` with default `main`; fresh `git fetch origin main` confirmed `origin/main` at `9f31975` is an ancestor of HEAD. The phase branches form a linear commit chain; no remote Phase 2/3 branch exists. User authorized publishing all verified work to `main` and using `main` as the working branch.
+- P3-S01 completed: local `main` fast-forwarded from `9f31975` to `1a37499` and pushed normally to verified `origin/main`. `git ls-remote` confirmed the remote `main` ref at `1a37499d5d90a6dff38a314cca419b6760d1b2f3`; local `main` tracked the same commit with a clean tree. Four fully merged local feature branch pointers were deleted; the remote lists only `main`. No force-push, remote branch deletion, or deployment occurred.
 
 ## Blockers
 
@@ -71,4 +73,4 @@ Phase 3 recruiter content and case studies complete locally (2026-11-01). Synchr
 
 ## Exact next action
 
-- Complete P3-S01: inspect the complete main-to-HEAD diff and secrets, rerun the relevant checks, fast-forward local `main`, then push only to verified `origin/main` without force. Record the remote commit and clean branch state. Keep the Travel AI repository link withheld until credential rotation and verification.
+- Continue future work on `main`. Confirm missing GymLVL and business-site individual contributions before replacing their TODOs; reconcile the business v2 demo and keep the Travel AI repository link withheld until credential rotation and verification. Review the Next/PostCSS advisories before release. Phase 4 WebGL remains optional and unstarted.
