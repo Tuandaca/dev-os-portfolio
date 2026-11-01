@@ -37,7 +37,7 @@ Phase 2 accepted; Phase 3 core workspace complete locally (2026-11-01).
 - Previous dependency audit found two production advisories in Next.js's bundled PostCSS; review before release.
 - Phase 2: CV extracted; Cinema repository audited at `c2581f9` and Travel AI at `398222f`. Original PDF copied to `public/resume/` with SHA256 matching the supplied file. `npm run lint`, `npm run typecheck`, and `npm run build` passed after the UI changes; all recruiter routes and the PDF returned HTTP 200. Independent content/route QA found no blocker. New content had no legacy-claim or credential-pattern matches.
 - Phase 2 design integration: `npm run lint`, `npm run typecheck`, and `npm run build` passed; build generated 13 static pages including both project slugs. `git diff --check` passed. `npm test` found no test files and exited 1; no behavior tests were added for design-only primitives.
-- Phase 3: `npm run lint`, `npm run typecheck`, `npm test` (12 passing), and `npm run build` passed. Five Playwright journeys passed together for landing/deep links/keyboard/mobile/history/no-JS; a sixth bounded-drag browser check passed after the final UI change. `/workspace` is server-rendered on demand; recruiter routes and project slugs remain prerendered. Independent QA found no Phase 3 blocker.
+- Phase 3: `npm run lint`, `npm run typecheck`, `npm test` (12 passing), `npm run test:e2e` (6 passing after the final drag change), and `npm run build` passed. Browser checks cover landing, deep links, keyboard navigation, mobile/history, no-JavaScript fallback, and bounded drag. `/workspace` is server-rendered on demand; recruiter routes and project slugs remain prerendered. Independent QA found no Phase 3 blocker.
 - P3-01 registry/store parser and transition tests passed (5). P3-03 terminal parser tests passed (3). P3-04 CV-backed adapter passed typecheck and targeted lint; no Travel URL was added. QA interaction tests passed (4), including launcher focus, window restore, project links, and Travel link withholding. Phase 2 primitives remain semantic wrappers; markup-only unit tests would add little value.
 
 ## Git state
@@ -50,6 +50,7 @@ Phase 2 accepted; Phase 3 core workspace complete locally (2026-11-01).
 - Phase 2 design branch `codex/phase2-design` ends at local commit `46e1d65` (`docs: specify DEV.OS architecture and visual foundations`); it has not been pushed or deployed.
 - Phase 2 audit confirmed clean `46e1d65`, the approved tokens/primitives/routes, and no Phase 2 scope drift. `gh auth status` confirms Tuandaca; `gh repo view` confirms the public `Tuandaca/dev-os-portfolio` repository with default `main`. Only local `main` tracks `origin/main`; the new `codex/phase3-core` branch has no upstream. No push or merge is authorized for this audit.
 - Current branch `codex/phase3-core` starts at `46e1d65` and has no upstream. The local Phase 3 commit is titled `feat: build DEV.OS core workspace`; neither Phase 2 nor Phase 3 branches were pushed or merged. Verified remote `main` remains `9f319750583faa62f9a1e3eb56fb35376fb45418` at the public `Tuandaca/dev-os-portfolio` repository.
+- A local docs checkpoint titled `docs: record Phase 3 browser verification` records the full six-test browser rerun after the workspace commit; it has no remote push.
 
 ## Blockers
 
