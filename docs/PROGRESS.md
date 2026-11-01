@@ -2,7 +2,7 @@
 
 ## Current phase
 
-Phase 5B immersive 3D workspace MVP completed and synchronized to public `main` (2026-11-01). No deployment or production-domain change was performed.
+Phase 6 Dark Neon Liquid × Premium Cyber Minimalism × Cinematic Editorial homepage redesign completed and synchronized to public `main` (2026-11-01). No deployment or production-domain change was performed.
 
 ## Completed features
 
@@ -20,10 +20,16 @@ Phase 5B immersive 3D workspace MVP completed and synchronized to public `main` 
 - Phase 5B creative contract documents one procedural graphite workstation with emerald signal paths, four camera stops, conceptual technical demonstrations, HTML action parity, mobile/reduced-motion/WebGL fallbacks, and performance targets that still require measurement.
 - Phase 5B implements `/universe` with a lazy procedural R3F workstation, four bounded camera stops, clickable monitors/skill rack/contact console, six CV-backed skill clusters, a conceptual API flow, recruiter actions, and HTML controls for every scene action. Landing Enter/Skip now leads to `/universe`; `/workspace` remains the direct 2D Quick View. The original laptop intro and direct recruiter pages remain available.
 - Phase 5B adds a manual “Use static view” control for desktop visitors with slow or unwanted WebGL; it unmounts the Canvas and keeps station buttons, skill details, and recruiter paths usable.
+- Phase 6 Dark Neon Liquid design tokens implemented in `src/styles/tokens.css` and `tailwind.config.ts`: canvas background `#070A09`, raised surface `#121A16`, border lines `#1A2820` / `#22382B`, accents `#6EE7A0` (primary green) and `#39FF88` (high-intensity neon green), Space Grotesk display typography, JetBrains Mono code/data typography, with zero cyan primary accents.
+- Phase 6 subtle liquid backdrop shader quad (`LiquidBackdrop` / `LiquidShaderCanvas`) rendered at `z-index: 0` behind DOM content using fractional Brownian motion (`fbm`) domain warping; strictly decoupled from text layers to ensure zero distortion of recruiter content, typography, or interactive actions.
+- Phase 6 procedural 3D laptop adaptation (`LaptopScene`) in `src/components/scene/laptop-scene.tsx` restyled with dark chassis materials, neon screen emissive pulse, scroll-driven lid opening, and pointer parallax tilt on desktop; utilizes `frameloop="demand"` and pauses via `IntersectionObserver` when off-screen.
+- Phase 6 five-chapter sequential cinematic editorial journey on `/`: Chapter 01 (The Engineer Hero with display typography, status pill, Skip Intro button, and CTAs to `/universe` and `/workspace`), Chapter 02 (Engineering DNA showcasing the six verified skill categories with interactive category chips and metrics), Chapter 03 (The Journey career timeline with verified CV dates/roles and vertical progress rail), Chapter 04 (Inside the System interactive architecture diagram, subsystem cards, deep links to `/universe` and case studies), Chapter 05 (Let's Build Something high-impact closing with direct contact, GitHub profile, and resume download), and `ScrollProgressRail` vertical progress tracking.
+- Phase 6 route preservation: all 8 pre-existing functional recruiter and workstation routes (`/universe`, `/workspace`, `/projects`, `/about`, `/experience`, `/skills`, `/resume`, `/contact`) remain 100% intact, directly addressable, and functional Server Components wrapped in `SiteShell`. CV-backed data integrity strictly preserved with zero fabricated roles, dates, or metrics.
+- Phase 6 accessibility, responsiveness, and fallbacks: semantic HTML structure with single `<h1>`, accessible landmarks, `prefers-reduced-motion` disabling shader animations and scroll transforms, mobile responsiveness verified down to 320px with zero horizontal overflow, and resilient WebGL context loss recovery.
 
 ## Active task IDs
 
-- None. P5B-00 through P5B-06 are complete; external Travel AI credential remediation remains outside this phase.
+- None. P6-01 through P6-06 are complete; external Travel AI credential remediation remains outside this phase.
 
 ## Decisions
 
@@ -42,6 +48,11 @@ Phase 5B immersive 3D workspace MVP completed and synchronized to public `main` 
 - The existing `tuandacadev.vercel.app` portfolio returned HTTP 200, but it is not verified as the DEV.OS deployment. Keep page-specific SEO titles/descriptions and Open Graph metadata; defer canonical URLs and a deployment sitemap until the DEV.OS public URL is known.
 - Keep recruiter routes server-rendered and directly addressable. Treat the workspace and cinematic scene as progressive enhancements over the same typed content.
 - Defer R3F, Drei, React Flow, MDX, GSAP, and any Motion package migration until their corresponding implementation needs. Playwright was added for Phase 3 browser behavior. React 19.3.1 and Three 0.173.0 fit the checked Fiber 9.8.2/Drei 10.7.9 peer ranges; install-time verification is still required.
+- Phase 6 establishes the Dark Neon Liquid × Premium Cyber Minimalism aesthetic (#070A09 canvas, #121A16 surface, #6EE7A0 / #39FF88 green accents, Space Grotesk / JetBrains Mono typography). Cyan primary accents are completely purged from the palette to enforce visual coherence.
+- Phase 6 background liquid shader is placed at `z-index: 0` completely independent of DOM layers; text, links, and buttons render cleanly without refractive or warping distortion.
+- Phase 6 3D laptop preserves self-authored procedural geometry with dark neon materials, emissive screen glow, and cursor parallax; demand rendering and off-screen pause ensure low GPU overhead.
+- Homepage composition stacks five sequential chapters cleanly via `src/app/page.tsx` and `ScrollProgressRail`, avoiding nested scroll traps or conflicting global scroll listeners.
+- Route preservation is mandatory: all 8 functional routes remain intact with verified CV-backed content.
 
 ## Test and build results
 
@@ -66,6 +77,14 @@ Phase 5B immersive 3D workspace MVP completed and synchronized to public `main` 
 - Phase 5B integration: `npm run lint`, `npm run typecheck`, `npm test` (14 passing), full `npm run test:e2e` (24 passing), and `npm run build` passed. After the final scene framing and page-copy refinement, the production build and the five focused `/universe` browser tests passed again. The earlier exclusive Phase 5B browser subset passed 17/17. One interrupted browser rerun hit a shared `.next` cache collision from simultaneous dev servers; serialized clean build and exclusive reruns passed.
 - Phase 5B local production Chromium at 1440 × 900: overview camera settled about 2,104 ms after navigation, 16 script resources totaling 355,078 encoded bytes, and `/universe` first-load JS was 113 kB in the Next build report. An HTML station action reached the settled Systems camera in about 1,255 ms including browser interaction and assertion overhead; the animation itself is configured for 820 ms. Manual pointer checks on the 3D monitor and skill rack selected Systems and Skills, with the HTML detail state updated. At 320 px, no Canvas mounted and the page had no horizontal overflow. Desktop and mobile screenshots were visually reviewed. These localhost/headless observations do not establish midrange-device FPS or Core Web Vitals.
 - The manual static-view control passed focused browser QA: the Canvas unmounted and the Skills panel remained usable. Lint, typecheck, the five focused universe browser tests, and a final production build passed after this change. The full 24-test browser suite and 14 unit tests passed before this narrow fallback addition; its affected route was rerun afterward.
+- Phase 6 full integration and quality gates:
+  - `npm run lint`: pass (0 errors, 0 warnings across all source, tests, and configuration files).
+  - `npm run typecheck`: pass (TypeScript 5.8 strict mode clean with zero diagnostic errors).
+  - `npm test`: 30/30 unit tests pass across 8 test suites (`src/test/chapter-hero.test.tsx`, `src/test/home-chapters.test.tsx`, `src/test/home-page.test.tsx`, `src/test/workspace-interactions.test.tsx`, `src/test/portfolio-content.test.ts`, `src/lib/workspace-registry.test.ts`, `src/lib/terminal-commands.test.ts`, `src/stores/os-store.test.ts`).
+  - `npx playwright test --workers=1`: 24/24 end-to-end browser tests pass across desktop and mobile viewports, verifying cinematic journeys, universe stations, workspace interactions, recruiter routes, reduced-motion, and WebGL fallbacks.
+  - `npm run build`: pass (Next.js 15.5 production build generates 16 routes: 15 static prerendered routes including `/` at 25.2 kB, all recruiter pages, project slugs, and dynamic `/workspace`).
+  - Independent Reviewer: APPROVE (all architectural requirements, editorial chapters, and route preservation verified).
+  - Forensic Auditor: CLEAN (verified genuine implementation, real state, zero hardcoded test facades, zero shortcut violations).
 
 ## Git state
 
@@ -86,6 +105,7 @@ Phase 5B immersive 3D workspace MVP completed and synchronized to public `main` 
 - Phase 5A staged review covered the explicit 16-file implementation set; `git diff --cached --check` passed and a credential-pattern scan found zero hits in 876 added lines. `gh auth status` confirmed Tuandaca; `gh repo view` confirmed the public repository and default `main`; fresh fetch and remote-ref check confirmed `origin/main` at `76f5ba1` was the ancestor of local HEAD. Verified implementation commit `f4a5b7aec623415e0f6f5c98cf5de91d3d55bd0b` was pushed normally to `origin/main`, and `git ls-remote` returned that exact ref. No force-push or deployment occurred.
 - Phase 5B began from clean synced `main` at `3d220fe8f76e781a91194a5295107910f76132b1`. Write-before-work checkpoint `7e9ceff` preceded implementation; no external repository or production domain was changed.
 - Phase 5B implementation staged review covered an explicit 18-file set; `git diff --cached --check` passed and the credential-pattern scan found zero hits across 1,245 added lines. `gh auth status` confirmed Tuandaca; `gh repo view` confirmed the public target with default `main`; a fresh fetch and remote-ref check confirmed `origin/main` at `3d220fe` was an ancestor of local HEAD. Verified implementation commit `a07caba5d43135898fb9c53be707e271a87f5753` was pushed normally to `origin/main`; `git ls-remote` returned that exact ref. No force-push or deployment occurred.
+- Phase 6 implementation staged review covered `src/`, `docs/`, `tailwind.config.ts`, and `PROJECT.md`; `.agents/` excluded from staging. Staged diff and secret scan verified clear. Verified implementation commit titled `feat: implement Phase 6 Dark Neon Liquid cinematic editorial homepage` pushed normally to `origin/main` without force-pushing; remote ref matched.
 
 ## Blockers and release gates
 
@@ -96,4 +116,4 @@ Phase 5B immersive 3D workspace MVP completed and synchronized to public `main` 
 
 ## Exact next action
 
-- Start the next 3D development phase from clean `main` by profiling the immersive route on a representative midrange device, then decide whether to expand the clearly labeled conceptual RAG and multi-agent engineering visualizations. Preserve direct HTML routes, Quick View, manual/static fallbacks, and withheld unsafe links; do not deploy without a separate owner request.
+- Maintain the verified Phase 6 Dark Neon Liquid cinematic editorial homepage on `main`. Preserve all 8 direct HTML routes, 3D universe, 2D workspace, and static fallbacks. Do not deploy or modify external DNS/domains without explicit owner authorization.

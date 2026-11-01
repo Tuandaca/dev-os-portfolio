@@ -5,14 +5,16 @@ import { Canvas, useThree } from "@react-three/fiber";
 import { useEffect, useMemo, useRef } from "react";
 import * as THREE from "three";
 
-export type LaptopScenePhase = "idle" | "opening" | "entering";
+export type LaptopScenePhase = "idle" | "opening" | "boot" | "entering";
 
 export interface LaptopSceneProps {
-  phase: LaptopScenePhase;
-  onReady: () => void;
-  onOpenComplete: () => void;
-  onEnterComplete: () => void;
-  onError: (error?: unknown) => void;
+  phase?: LaptopScenePhase;
+  isOpen?: boolean;
+  scrollProgress?: number;
+  onReady?: () => void;
+  onOpenComplete?: () => void;
+  onEnterComplete?: () => void;
+  onError?: (error?: unknown) => void;
 }
 
 const INITIAL_CAMERA = new THREE.Vector3(4.2, 2.75, 5.25);
@@ -46,10 +48,32 @@ function Keyboard() {
     invalidate();
   }, [invalidate]);
 
+  // Clean disposal on unmount
+  useEffect(() => {
+    const mesh = keys.current;
+    return () => {
+      if (mesh) {
+        mesh.geometry.dispose();
+        if (Array.isArray(mesh.material)) {
+          mesh.material.forEach((mat) => mat.dispose());
+        } else {
+          mesh.material.dispose();
+        }
+      }
+    };
+  }, []);
+
   return (
     <instancedMesh ref={keys} args={[undefined, undefined, keyboardPositions.length]}>
       <boxGeometry args={[0.275, 0.022, 0.29]} />
-      <meshStandardMaterial color="#171f24" metalness={0.32} roughness={0.64} />
+      {/* Dark obsidian keys with subtle green rim illumination */}
+      <meshStandardMaterial
+        color="#0B100E"
+        metalness={0.35}
+        roughness={0.6}
+        emissive="#121A16"
+        emissiveIntensity={0.25}
+      />
     </instancedMesh>
   );
 }
@@ -65,60 +89,146 @@ function LaptopBody({
 }) {
   return (
     <group>
+      {/* Base chassis: #0E1512 bottom, #121A16 upper surface */}
       <RoundedBox args={[3.55, 0.16, 2.3]} radius={0.065} smoothness={3} position={[0, -0.04, 0]}>
-        <meshStandardMaterial color="#10171b" metalness={0.67} roughness={0.35} />
+        <meshStandardMaterial color="#0E1512" metalness={0.65} roughness={0.35} />
       </RoundedBox>
       <mesh position={[0, 0.046, 0.02]}>
         <boxGeometry args={[3.28, 0.011, 1.84]} />
-        <meshStandardMaterial color="#202b2c" metalness={0.36} roughness={0.62} />
+        <meshStandardMaterial color="#121A16" metalness={0.4} roughness={0.6} />
       </mesh>
       <Keyboard />
+      {/* Trackpad: dark obsidian with subtle metallic sheen */}
       <RoundedBox args={[1.01, 0.008, 0.47]} radius={0.025} smoothness={2} position={[0, 0.056, 0.79]}>
-        <meshStandardMaterial color="#252d2f" metalness={0.5} roughness={0.55} />
+        <meshStandardMaterial color="#0E1512" metalness={0.5} roughness={0.55} />
       </RoundedBox>
+      {/* Front indicator notch / neon accent */}
       <mesh position={[0, 0.045, 1.148]}>
         <boxGeometry args={[3.14, 0.006, 0.016]} />
-        <meshBasicMaterial color="#386c57" />
+        <meshBasicMaterial color="#39FF88" toneMapped={false} />
       </mesh>
+      {/* Hinge */}
       <mesh position={[0, 0.035, -1.08]} rotation={[0, 0, Math.PI / 2]}>
         <cylinderGeometry args={[0.05, 0.05, 3.17, 12]} />
-        <meshStandardMaterial color="#0a1114" metalness={0.78} roughness={0.3} />
+        <meshStandardMaterial color="#0E1512" metalness={0.75} roughness={0.3} />
       </mesh>
 
+      {/* Screen Lid */}
       <group ref={lid} position={[0, 0.045, -1.065]} rotation={[CLOSED_LID_ANGLE, 0, 0]}>
+        {/* Lid back shell */}
         <RoundedBox args={[3.47, 2.24, 0.1]} radius={0.065} smoothness={3} position={[0, 1.13, 0]}>
-          <meshStandardMaterial color="#0c1115" metalness={0.63} roughness={0.32} />
+          <meshStandardMaterial color="#0E1512" metalness={0.65} roughness={0.32} />
         </RoundedBox>
+        {/* Inner bezel */}
         <mesh position={[0, 1.13, 0.056]}>
           <boxGeometry args={[3.23, 1.98, 0.014]} />
-          <meshStandardMaterial color="#030b0a" metalness={0.08} roughness={0.24} />
+          <meshStandardMaterial color="#070A09" metalness={0.1} roughness={0.3} />
         </mesh>
+        {/* Screen glass with neon green emissive glow */}
         <mesh position={[0, 1.13, 0.067]}>
           <planeGeometry args={[3.05, 1.8]} />
-          <meshStandardMaterial ref={screen} color="#06120f" emissive="#2e8f63" emissiveIntensity={0.005} metalness={0.04} roughness={0.4} />
+          <meshStandardMaterial
+            ref={screen}
+            color="#070A09"
+            emissive="#39FF88"
+            emissiveIntensity={0.01}
+            metalness={0.05}
+            roughness={0.35}
+          />
         </mesh>
+        {/* Terminal boot lines: high-intensity neon #39FF88 & primary #6EE7A0 */}
         <group ref={bootMarks} position={[-1.21, 1.65, 0.077]} visible={false}>
           <mesh position={[0.11, 0, 0]}>
             <planeGeometry args={[0.22, 0.12]} />
-            <meshBasicMaterial color="#6ee7a0" toneMapped={false} />
+            <meshBasicMaterial color="#39FF88" toneMapped={false} />
           </mesh>
           {[0.8, 1.5, 1.12, 1.72, 0.92].map((width, index) => (
             <mesh key={index} position={[width / 2, -0.3 - index * 0.23, 0]}>
               <planeGeometry args={[width, 0.045]} />
-              <meshBasicMaterial color={index === 0 ? "#6ee7a0" : "#287f55"} toneMapped={false} />
+              <meshBasicMaterial
+                color={index === 0 ? "#39FF88" : index % 2 === 1 ? "#6EE7A0" : "#22C55E"}
+                toneMapped={false}
+              />
             </mesh>
           ))}
         </group>
+        {/* Webcam indicator */}
         <mesh position={[0, 2.13, 0.068]}>
           <sphereGeometry args={[0.018, 8, 6]} />
-          <meshBasicMaterial color="#283333" />
+          <meshBasicMaterial color="#1A2820" />
         </mesh>
       </group>
     </group>
   );
 }
 
-function CameraAndHinge({ phase, onOpenComplete, onEnterComplete, onError }: Pick<LaptopSceneProps, "phase" | "onOpenComplete" | "onEnterComplete" | "onError">) {
+function ParallaxStage({ children }: { children: React.ReactNode }) {
+  const group = useRef<THREE.Group>(null);
+  const { invalidate } = useThree();
+  const mouse = useRef({ x: 0, y: 0, targetX: 0, targetY: 0 });
+  const animFrame = useRef<number | null>(null);
+
+  useEffect(() => {
+    if (typeof window === "undefined" || typeof window.matchMedia !== "function") return;
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reducedMotion) return;
+
+    const handlePointerMove = (e: PointerEvent) => {
+      mouse.current.targetX = (e.clientX / window.innerWidth - 0.5) * 2;
+      mouse.current.targetY = (e.clientY / window.innerHeight - 0.5) * 2;
+      scheduleUpdate();
+    };
+
+    const updateTilt = () => {
+      animFrame.current = null;
+      if (!group.current) return;
+      const dx = mouse.current.targetX - mouse.current.x;
+      const dy = mouse.current.targetY - mouse.current.y;
+      mouse.current.x += dx * 0.08;
+      mouse.current.y += dy * 0.08;
+
+      group.current.rotation.y = mouse.current.x * 0.12;
+      group.current.rotation.x = -mouse.current.y * 0.06;
+      invalidate();
+
+      if (Math.abs(dx) > 0.001 || Math.abs(dy) > 0.001) {
+        animFrame.current = requestAnimationFrame(updateTilt);
+      }
+    };
+
+    const scheduleUpdate = () => {
+      if (animFrame.current === null) {
+        animFrame.current = requestAnimationFrame(updateTilt);
+      }
+    };
+
+    window.addEventListener("pointermove", handlePointerMove, { passive: true });
+    return () => {
+      window.removeEventListener("pointermove", handlePointerMove);
+      if (animFrame.current !== null) {
+        cancelAnimationFrame(animFrame.current);
+      }
+    };
+  }, [invalidate]);
+
+  return <group ref={group}>{children}</group>;
+}
+
+function CameraAndHinge({
+  phase = "idle",
+  isOpen,
+  scrollProgress,
+  onOpenComplete,
+  onEnterComplete,
+  onError,
+}: {
+  phase?: LaptopScenePhase;
+  isOpen?: boolean;
+  scrollProgress?: number;
+  onOpenComplete?: () => void;
+  onEnterComplete?: () => void;
+  onError?: (error?: unknown) => void;
+}) {
   const lid = useRef<THREE.Group>(null);
   const screen = useRef<THREE.MeshStandardMaterial>(null);
   const bootMarks = useRef<THREE.Group>(null);
@@ -127,19 +237,62 @@ function CameraAndHinge({ phase, onOpenComplete, onEnterComplete, onError }: Pic
   callbacks.current = { onOpenComplete, onEnterComplete, onError };
   const { camera, invalidate } = useThree();
 
+  // Scroll progress or explicit isOpen handling
   useEffect(() => {
-    if (phase !== "idle" || !lid.current || !screen.current) return;
-    lid.current.rotation.x = CLOSED_LID_ANGLE;
-    screen.current.emissiveIntensity = 0.005;
-    if (bootMarks.current) bootMarks.current.visible = false;
-    camera.position.copy(INITIAL_CAMERA);
-    target.current.copy(INITIAL_TARGET);
-    camera.lookAt(target.current);
-    invalidate();
-  }, [phase, camera, invalidate]);
+    if (!lid.current || !screen.current) return;
 
+    if (scrollProgress !== undefined) {
+      const progress = Math.min(Math.max(scrollProgress, 0), 1);
+      const lidProgress = Math.min(progress * 1.8, 1);
+      const eased = lidProgress < 0.5 ? 4 * lidProgress ** 3 : 1 - (-2 * lidProgress + 2) ** 3 / 2;
+      lid.current.rotation.x = THREE.MathUtils.lerp(CLOSED_LID_ANGLE, OPEN_LID_ANGLE, eased);
+      screen.current.emissiveIntensity = THREE.MathUtils.lerp(0.01, 0.14, eased);
+      if (bootMarks.current) bootMarks.current.visible = eased > 0.4;
+      camera.position.lerpVectors(INITIAL_CAMERA, OPEN_CAMERA, progress);
+      target.current.lerpVectors(INITIAL_TARGET, OPEN_TARGET, progress);
+      camera.lookAt(target.current);
+      invalidate();
+      return;
+    }
+
+    if (isOpen && phase === "idle") {
+      lid.current.rotation.x = OPEN_LID_ANGLE;
+      screen.current.emissiveIntensity = 0.12;
+      if (bootMarks.current) bootMarks.current.visible = true;
+      camera.position.copy(OPEN_CAMERA);
+      target.current.copy(OPEN_TARGET);
+      camera.lookAt(target.current);
+      invalidate();
+      return;
+    }
+
+    if (phase === "idle" && !isOpen) {
+      lid.current.rotation.x = CLOSED_LID_ANGLE;
+      screen.current.emissiveIntensity = 0.01;
+      if (bootMarks.current) bootMarks.current.visible = false;
+      camera.position.copy(INITIAL_CAMERA);
+      target.current.copy(INITIAL_TARGET);
+      camera.lookAt(target.current);
+      invalidate();
+      return;
+    }
+
+    if (phase === "boot") {
+      lid.current.rotation.x = OPEN_LID_ANGLE;
+      screen.current.emissiveIntensity = 0.15;
+      if (bootMarks.current) bootMarks.current.visible = true;
+      camera.position.copy(OPEN_CAMERA);
+      target.current.copy(OPEN_TARGET);
+      camera.lookAt(target.current);
+      invalidate();
+    }
+  }, [scrollProgress, isOpen, phase, camera, invalidate]);
+
+  // Animated opening or entering transitions
   useEffect(() => {
-    if (phase === "idle" || !lid.current || !screen.current) return;
+    if (scrollProgress !== undefined) return;
+    if (phase !== "opening" && phase !== "entering") return;
+    if (!lid.current || !screen.current) return;
 
     const duration = phase === "opening" ? 940 : 700;
     const endCamera = phase === "opening" ? OPEN_CAMERA : ENTER_CAMERA;
@@ -157,24 +310,26 @@ function CameraAndHinge({ phase, onOpenComplete, onEnterComplete, onError }: Pic
     const advance = (timestamp: number) => {
       try {
         if (startedAt === null) startedAt = timestamp;
-        const progress = Math.min((timestamp - startedAt) / duration, 1);
+        const elapsed = timestamp - startedAt;
+        const progress = Math.min(elapsed / duration, 1);
         const eased = progress < 0.5 ? 4 * progress ** 3 : 1 - (-2 * progress + 2) ** 3 / 2;
         if (lid.current) lid.current.rotation.x = THREE.MathUtils.lerp(startLid, endLid, eased);
-        if (screen.current) screen.current.emissiveIntensity = THREE.MathUtils.lerp(startGlow, 0.12, eased);
+        if (screen.current) screen.current.emissiveIntensity = THREE.MathUtils.lerp(startGlow, 0.14, eased);
         if (bootMarks.current) bootMarks.current.visible = phase === "entering" || eased > 0.43;
         camera.position.lerpVectors(startCamera, endCamera, eased);
         target.current.lerpVectors(startTarget, endTarget, eased);
         camera.lookAt(target.current);
         invalidate();
+
         if (progress < 1) {
           frame = requestAnimationFrame(advance);
         } else if (!finished) {
           finished = true;
-          if (phase === "opening") callbacks.current.onOpenComplete();
-          else callbacks.current.onEnterComplete();
+          if (phase === "opening") callbacks.current.onOpenComplete?.();
+          else callbacks.current.onEnterComplete?.();
         }
       } catch (error) {
-        callbacks.current.onError(error);
+        callbacks.current.onError?.(error);
       }
     };
 
@@ -188,21 +343,38 @@ function CameraAndHinge({ phase, onOpenComplete, onEnterComplete, onError }: Pic
         frame = requestAnimationFrame(advance);
       }
     };
+
     document.addEventListener("visibilitychange", onVisibilityChange);
     if (document.hidden) hiddenAt = performance.now();
     else frame = requestAnimationFrame(advance);
+
     return () => {
       finished = true;
       cancelAnimationFrame(frame);
       document.removeEventListener("visibilitychange", onVisibilityChange);
     };
-  }, [phase, camera, invalidate]);
+  }, [phase, scrollProgress, camera, invalidate]);
 
-  return <LaptopBody lid={lid} screen={screen} bootMarks={bootMarks} />;
+  return (
+    <ParallaxStage>
+      <LaptopBody lid={lid} screen={screen} bootMarks={bootMarks} />
+    </ParallaxStage>
+  );
 }
 
-export function LaptopScene({ phase, onReady, onOpenComplete, onEnterComplete, onError }: LaptopSceneProps) {
-  const rendererOptions = useMemo(() => ({ antialias: true, alpha: true, powerPreference: "low-power" as const }), []);
+export function LaptopScene({
+  phase = "idle",
+  isOpen,
+  scrollProgress,
+  onReady,
+  onOpenComplete,
+  onEnterComplete,
+  onError,
+}: LaptopSceneProps) {
+  const rendererOptions = useMemo(
+    () => ({ antialias: true, alpha: true, powerPreference: "low-power" as const }),
+    [],
+  );
 
   return (
     <div aria-hidden="true" className="h-full w-full pointer-events-none">
@@ -214,26 +386,42 @@ export function LaptopScene({ phase, onReady, onOpenComplete, onEnterComplete, o
         gl={rendererOptions}
         onCreated={({ gl }) => {
           try {
-            if (gl.getContext()) onReady();
-            else onError(new Error("WebGL context unavailable"));
+            if (gl.getContext()) onReady?.();
+            else onError?.(new Error("WebGL context unavailable"));
           } catch (error) {
-            onError(error);
+            onError?.(error);
           }
         }}
       >
-        <color attach="background" args={["#080d12"]} />
-        <ambientLight intensity={0.72} color="#b6d1c2" />
-        <directionalLight position={[2.4, 5.5, 3]} intensity={2.1} color="#d6e5dd" />
-        <pointLight position={[-3.2, 1.4, -1.6]} intensity={16} distance={7} color="#6ee7a0" />
+        {/* Dark Neon Liquid Background: #070A09 */}
+        <color attach="background" args={["#070A09"]} />
+
+        {/* Ambient & Directional Lighting with emerald accents */}
+        <ambientLight intensity={0.65} color="#121A16" />
+        <directionalLight position={[2.4, 5.5, 3]} intensity={1.8} color="#6EE7A0" />
+
+        {/* Neon green point lights */}
+        <pointLight position={[-3.2, 1.4, -1.6]} intensity={16} distance={8} color="#39FF88" />
+        <pointLight position={[3.2, 1.2, 1.5]} intensity={6} distance={6} color="#6EE7A0" />
+
+        {/* Dark floor plane */}
         <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.14, 0]}>
           <planeGeometry args={[30, 30]} />
-          <meshStandardMaterial color="#0b1115" metalness={0.22} roughness={0.92} />
+          <meshStandardMaterial color="#070A09" metalness={0.3} roughness={0.85} />
         </mesh>
         <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.136, -2.2]}>
           <planeGeometry args={[7.5, 0.012]} />
-          <meshBasicMaterial color="#194a38" />
+          <meshBasicMaterial color="#1A2820" />
         </mesh>
-        <CameraAndHinge phase={phase} onOpenComplete={onOpenComplete} onEnterComplete={onEnterComplete} onError={onError} />
+
+        <CameraAndHinge
+          phase={phase}
+          isOpen={isOpen}
+          scrollProgress={scrollProgress}
+          onOpenComplete={onOpenComplete}
+          onEnterComplete={onEnterComplete}
+          onError={onError}
+        />
       </Canvas>
     </div>
   );

@@ -21,6 +21,8 @@ const config: Config = {
           accent: tokenColor("accent"),
           "accent-dim": tokenColor("accent-dim"),
           "accent-glow": "rgb(var(--dev-color-accent) / 0.15)",
+          neon: tokenColor("neon"),
+          "neon-glow": "rgb(var(--dev-color-neon) / 0.2)",
           text: tokenColor("text"),
           secondary: tokenColor("secondary"),
           muted: tokenColor("muted"),
@@ -33,6 +35,7 @@ const config: Config = {
       fontFamily: {
         mono: ["var(--dev-font-mono)"],
         sans: ["var(--dev-font-sans)"],
+        display: ["var(--dev-font-display)"],
       },
       borderRadius: {
         control: "var(--dev-radius-control)",
@@ -48,6 +51,7 @@ const config: Config = {
         window: "var(--dev-shadow-window)",
         "window-focus": "var(--dev-shadow-window-focus)",
         glow: "0 0 15px rgb(var(--dev-color-accent) / 0.35)",
+        "glow-neon": "0 0 20px rgb(var(--dev-color-neon) / 0.4), 0 0 40px rgb(var(--dev-color-neon) / 0.15)",
         "glow-cyan": "0 0 15px rgb(var(--dev-color-cyan) / 0.35)",
       },
       animation: {

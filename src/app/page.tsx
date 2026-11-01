@@ -1,98 +1,40 @@
-import Link from "next/link";
-import { profile } from "@/content/profile";
-import { skillGroups } from "@/content/skills";
-import { workExperience } from "@/content/experience";
-import { ProjectsContent } from "@/components/portfolio/content-sections";
-import { LandingExperience } from "@/components/landing/landing-experience";
-
-const primaryAction = "inline-flex items-center justify-center rounded-md border border-dev-accent bg-dev-accent px-5 py-3 font-mono text-sm font-semibold text-dev-bg hover:bg-dev-text focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-dev-accent";
-const secondaryAction = "inline-flex items-center justify-center rounded-md border border-dev-border-bright px-5 py-3 font-mono text-sm text-dev-text hover:border-dev-accent hover:text-dev-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-dev-accent";
+import { ChapterHero } from "@/components/home/chapter-hero";
+import { ChapterDna } from "@/components/home/chapter-dna";
+import { ChapterJourney } from "@/components/home/chapter-journey";
+import { ChapterSystem } from "@/components/home/chapter-system";
+import { ChapterClosing } from "@/components/home/chapter-closing";
+import { ScrollProgressRail } from "@/components/home/scroll-progress-rail";
 
 export default function Home() {
   return (
-    <div className="space-y-20">
-      <section className="min-h-[520px] border-b border-dev-border/80 pb-16">
-        <LandingExperience
-          copy={
-            <>
-              <p className="font-mono text-xs uppercase tracking-[0.28em] text-dev-accent">DEV.OS / Portfolio</p>
-              <h1 className="mt-5 text-5xl font-semibold leading-[1.05] tracking-tight sm:text-7xl">
-                {profile.name}<span className="text-dev-accent">.</span>
-              </h1>
-              <p className="mt-5 text-xl font-medium text-dev-text sm:text-2xl">{profile.headline}</p>
-              <p className="mt-6 max-w-2xl text-base leading-8 text-dev-secondary sm:text-lg">{profile.summary}</p>
-              <p className="mt-5 max-w-xl border-l-2 border-dev-accent/70 pl-4 font-mono text-sm leading-6 text-dev-text">Explore the systems behind the work through an interactive 3D workstation, or go straight to the portfolio pages.</p>
-            </>
-          }
-          quickLinks={
-            <p>
-              Prefer a quick scan? <Link href="/resume" className="text-dev-accent underline-offset-4 hover:underline focus-visible:underline">View resume</Link>
-              <span aria-hidden="true"> · </span>
-              <a href={profile.githubUrl} target="_blank" rel="noopener noreferrer" className="text-dev-accent underline-offset-4 hover:underline focus-visible:underline">GitHub ↗</a>
-            </p>
-          }
-        />
-        <div className="dev-panel mt-8 rounded-2xl p-6 font-mono text-sm shadow-window sm:p-8">
-          <p className="text-xs uppercase tracking-[0.22em] text-dev-accent">Profile / Overview</p>
-          <dl className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-            <div>
-              <dt className="text-xs uppercase text-dev-muted">Focus</dt>
-              <dd className="mt-1 text-dev-text">Full-stack applications · REST APIs · software architecture · AI/RAG</dd>
-            </div>
-            <div>
-              <dt className="text-xs uppercase text-dev-muted">Experience context</dt>
-              <dd className="mt-1 text-dev-text">{profile.experienceContext}</dd>
-            </div>
-            <div>
-              <dt className="text-xs uppercase text-dev-muted">Based in</dt>
-              <dd className="mt-1 text-dev-text">{profile.location}</dd>
-            </div>
-            <div>
-              <dt className="text-xs uppercase text-dev-muted">Work history</dt>
-              <dd className="mt-1 text-dev-text">University IT role and freelance evaluation</dd>
-            </div>
-          </dl>
-        </div>
-      </section>
+    <div className="relative w-full overflow-x-clip">
+      {/* Chapter 01: The Engineer (Hero Stage & Procedural 3D Stage) */}
+      <div className="relative z-10 w-full">
+        <ChapterHero />
+      </div>
 
-      <section aria-labelledby="projects-heading">
-        <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
-          <div>
-            <p className="font-mono text-xs uppercase tracking-[0.22em] text-dev-accent">01 / Selected work</p>
-            <h2 id="projects-heading" className="mt-3 text-3xl font-semibold sm:text-4xl">Featured projects</h2>
-            <p className="mt-3 max-w-2xl leading-7 text-dev-secondary">Read the implementation evidence, decisions, and open questions behind each project.</p>
-          </div>
-          <Link href="/projects" className="font-mono text-sm text-dev-accent hover:underline focus-visible:underline">All projects →</Link>
-        </div>
-        <ProjectsContent />
-      </section>
+      {/* Chapter 02: Engineering DNA (Verified Skill Categories & Toolchains) */}
+      <div className="relative z-20 w-full border-t border-dev-border/70 bg-dev-bg/95 shadow-[0_-20px_40px_-15px_rgb(0_0_0/0.8)] backdrop-blur-sm transition-opacity duration-reveal">
+        <ChapterDna />
+      </div>
 
-      <section className="grid gap-8 lg:grid-cols-2">
-        <div className="dev-panel rounded-xl p-7 sm:p-9">
-          <p className="font-mono text-xs uppercase tracking-[0.22em] text-dev-accent">02 / Work</p>
-          <h2 className="mt-3 text-3xl font-semibold">Experience</h2>
-          <p className="mt-5 leading-8 text-dev-secondary">{workExperience[0].role} in the {workExperience[0].context}, {workExperience[0].period}. The CV also records a separate freelance web data evaluation role.</p>
-          <Link href="/experience" className="mt-6 inline-block font-mono text-sm text-dev-accent hover:underline focus-visible:underline">View work history and education →</Link>
-        </div>
-        <div className="dev-panel rounded-xl p-7 sm:p-9">
-          <p className="font-mono text-xs uppercase tracking-[0.22em] text-dev-accent">03 / Toolkit</p>
-          <h2 className="mt-3 text-3xl font-semibold">Technical stack</h2>
-          <p className="mt-5 leading-8 text-dev-secondary">{skillGroups[1].items.slice(0, 4).join(" · ")} · {skillGroups[3].items.slice(0, 4).join(" · ")}</p>
-          <Link href="/skills" className="mt-6 inline-block font-mono text-sm text-dev-accent hover:underline focus-visible:underline">Explore skills and workflow →</Link>
-        </div>
-      </section>
+      {/* Chapter 03: The Journey (Verified Career & Academic Timeline) */}
+      <div className="relative z-30 w-full border-t border-dev-border/70 bg-dev-bg/95 shadow-[0_-20px_40px_-15px_rgb(0_0_0/0.8)] backdrop-blur-sm transition-opacity duration-reveal">
+        <ChapterJourney />
+      </div>
 
-      <section className="dev-panel flex flex-wrap items-center justify-between gap-6 rounded-xl p-7 sm:p-9">
-        <div>
-          <p className="font-mono text-xs uppercase tracking-[0.22em] text-dev-accent">04 / Connect</p>
-          <h2 className="mt-3 text-2xl font-semibold">See the CV or start a conversation.</h2>
-        </div>
-        <div className="flex flex-wrap gap-3">
-          <Link href="/contact" className={primaryAction}>Contact →</Link>
-          <Link href="/universe" className={secondaryAction}>Explore the 3D universe</Link>
-          <Link href="/workspace" className={secondaryAction}>Quick View / 2D workspace</Link>
-        </div>
-      </section>
+      {/* Chapter 04: Inside the System (Interactive Architecture & Data Pipelines) */}
+      <div className="relative z-40 w-full border-t border-dev-border/70 bg-dev-bg/95 shadow-[0_-20px_40px_-15px_rgb(0_0_0/0.8)] backdrop-blur-sm transition-opacity duration-reveal">
+        <ChapterSystem />
+      </div>
+
+      {/* Chapter 05: Let's Build Something (Closing Action Hub & Recruiter Quick Reference) */}
+      <div className="relative z-50 w-full border-t border-dev-border/70 bg-dev-bg/95 shadow-[0_-20px_40px_-15px_rgb(0_0_0/0.8)] backdrop-blur-sm transition-opacity duration-reveal">
+        <ChapterClosing />
+      </div>
+
+      {/* Fixed Vertical Scroll Progress Rail (hidden on mobile, visible on md: and above) */}
+      <ScrollProgressRail />
     </div>
   );
 }
