@@ -2,7 +2,7 @@
 
 ## Current phase
 
-Phase 3 recruiter content and case studies are synchronized to the verified public `main` branch (2026-11-01). No deployment was performed.
+Phase 4 cinematic laptop and boot experience in progress (2026-11-01). Phases 0–3 remain synchronized on `main`; no deployment was performed.
 
 ## Completed features
 
@@ -17,7 +17,7 @@ Phase 3 recruiter content and case studies are synchronized to the verified publ
 
 ## Active task IDs
 
-- None. Phase 4 optional cinematic work remains TODO.
+- P4-00 architecture contract; P4-01 procedural laptop scene; P4-02 cinematic landing and skippable transition; P4-03 focused QA; P4-04 integration, verification, and Git synchronization.
 
 ## Decisions
 
@@ -63,6 +63,7 @@ Phase 3 recruiter content and case studies are synchronized to the verified publ
 - The recruiter content work started from clean local `codex/phase3-portfolio-content` at `e7f4880`; its implementation commit is `e583f9e` (`feat: complete sourced recruiter portfolio`).
 - P3-S01 preflight: clean `codex/phase3-portfolio-content` at `e583f9e`; `gh auth status` confirms Tuandaca; `gh repo view` confirms public `Tuandaca/dev-os-portfolio` with default `main`; fresh `git fetch origin main` confirmed `origin/main` at `9f31975` is an ancestor of HEAD. The phase branches form a linear commit chain; no remote Phase 2/3 branch exists. User authorized publishing all verified work to `main` and using `main` as the working branch.
 - P3-S01 completed: local `main` fast-forwarded from `9f31975` to `1a37499` and pushed normally to verified `origin/main`. `git ls-remote` confirmed the remote `main` ref at `1a37499d5d90a6dff38a314cca419b6760d1b2f3`; local `main` tracked the same commit with a clean tree. Four fully merged local feature branch pointers were deleted; the remote lists only `main`. No force-push, remote branch deletion, or deployment occurred.
+- Phase 4 preflight: clean `main` at `0362d40a7b051f6c07225e9184c655d523b6efca`, matching `origin/main` and a fresh remote HEAD check. Backup scripts and `docs/BACKUP.md` are present; the scheduled task remains uninstalled by design. Installed React 19.3.1 and Three 0.173.0 satisfy npm peer ranges for Fiber 9.8.2 and Drei 10.7.9. A fresh production `npm audit` still reports one moderate Next and one high transitive PostCSS advisory; the suggested Next fix is a major-version upgrade, to review separately from Phase 4 scene integration.
 
 ## Blockers
 
@@ -73,4 +74,4 @@ Phase 3 recruiter content and case studies are synchronized to the verified publ
 
 ## Exact next action
 
-- Continue future work on `main`. Confirm missing GymLVL and business-site individual contributions before replacing their TODOs; reconcile the business v2 demo and keep the Travel AI repository link withheld until credential rotation and verification. Review the Next/PostCSS advisories before release. Phase 4 WebGL remains optional and unstarted.
+- Complete the Phase 4 architecture contract, then implement the procedural scene and accessible landing transition with nonoverlapping file ownership. Run targeted fallback tests, full checks, and production build; review staged diff and secrets before a coherent `main` commit and push. Keep recruiter content, CV, and the existing OS behavior intact.
