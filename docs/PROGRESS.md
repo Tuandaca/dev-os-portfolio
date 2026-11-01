@@ -2,7 +2,7 @@
 
 ## Current phase
 
-Phase 3 recruiter content and case studies complete locally (2026-11-01). The core workspace remains complete locally.
+Phase 3 recruiter content and case studies complete locally (2026-11-01). Synchronization to the verified public `main` branch is in progress.
 
 ## Completed features
 
@@ -17,7 +17,7 @@ Phase 3 recruiter content and case studies complete locally (2026-11-01). The co
 
 ## Active task IDs
 
-- None. Phase 4 optional cinematic work remains TODO.
+- P3-S01 — fast-forward verified Phase 2/3 history to `main`, verify, and push without force. Phase 4 optional cinematic work remains TODO.
 
 ## Decisions
 
@@ -60,6 +60,7 @@ Phase 3 recruiter content and case studies complete locally (2026-11-01). The co
 - A local docs checkpoint titled `docs: record Phase 3 browser verification` records the full six-test browser rerun after the workspace commit; it has no remote push.
 - Recruiter content work starts from clean local `codex/phase3-portfolio-content` at `e7f4880`. No push, merge, or deployment is planned in this checkpoint.
 - The recruiter content phase is recorded in a local commit titled `feat: complete sourced recruiter portfolio`; this branch has no upstream and has not been pushed, merged, or deployed.
+- P3-S01 preflight: clean `codex/phase3-portfolio-content` at `e583f9e`; `gh auth status` confirms Tuandaca; `gh repo view` confirms public `Tuandaca/dev-os-portfolio` with default `main`; fresh `git fetch origin main` confirmed `origin/main` at `9f31975` is an ancestor of HEAD. The phase branches form a linear commit chain; no remote Phase 2/3 branch exists. User authorized publishing all verified work to `main` and using `main` as the working branch.
 
 ## Blockers
 
@@ -70,4 +71,4 @@ Phase 3 recruiter content and case studies complete locally (2026-11-01). The co
 
 ## Exact next action
 
-- Review the local recruiter-content commit. Confirm missing GymLVL and business-site individual contributions if those TODO sections should become claims; reconcile the business v2 demo before linking it. Keep the Travel AI repository link withheld until credential rotation and verification. Begin optional Phase 4 WebGL only after this functional portfolio checkpoint is accepted.
+- Complete P3-S01: inspect the complete main-to-HEAD diff and secrets, rerun the relevant checks, fast-forward local `main`, then push only to verified `origin/main` without force. Record the remote commit and clean branch state. Keep the Travel AI repository link withheld until credential rotation and verification.
