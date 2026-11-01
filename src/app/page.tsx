@@ -19,10 +19,14 @@ export default function Home() {
           <p className="mt-5 text-xl font-medium text-dev-text sm:text-2xl">{profile.headline}</p>
           <p className="mt-6 max-w-2xl text-base leading-8 text-dev-secondary sm:text-lg">{profile.summary}</p>
           <div className="mt-8 flex flex-wrap gap-3">
-            <Link href="/projects" className={primaryAction}>Explore projects →</Link>
-            <Link href="/resume" className={secondaryAction}>View resume</Link>
-            <a href={profile.githubUrl} target="_blank" rel="noopener noreferrer" className={secondaryAction}>GitHub ↗</a>
+            <Link href="/workspace" className={primaryAction}>Enter DEV.OS →</Link>
+            <Link href="/projects" className={secondaryAction}>Browse portfolio</Link>
           </div>
+          <p className="mt-5 text-sm text-dev-secondary">
+            Prefer a quick scan? <Link href="/resume" className="text-dev-accent underline-offset-4 hover:underline focus-visible:underline">View resume</Link>
+            <span aria-hidden="true"> · </span>
+            <a href={profile.githubUrl} target="_blank" rel="noopener noreferrer" className="text-dev-accent underline-offset-4 hover:underline focus-visible:underline">GitHub ↗</a>
+          </p>
         </div>
         <div className="dev-panel rounded-2xl p-6 font-mono text-sm shadow-window sm:p-8">
           <p className="text-xs uppercase tracking-[0.22em] text-dev-accent">Profile / Overview</p>
