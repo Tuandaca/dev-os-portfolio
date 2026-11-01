@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Desktop } from "@/components/os/desktop";
+import { WorkspaceArrivalFocus } from "@/components/os/workspace-arrival-focus";
 import { PageIntro } from "@/components/portfolio/page-intro";
 import { parseWorkspaceSelection, workspaceApps } from "@/lib/workspace-registry";
 
@@ -21,8 +22,10 @@ export default async function WorkspacePage({ searchParams }: WorkspacePageProps
       <PageIntro
         eyebrow="DEV.OS / Workspace"
         title="Explore DEV.OS"
+        titleId="workspace-heading"
         description="Open the portfolio applications, or follow a direct page link for a focused reading path."
       />
+      <WorkspaceArrivalFocus />
       <nav aria-label="Direct portfolio pages" className="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-dev-secondary">
         <span className="font-mono text-xs uppercase tracking-wider text-dev-muted">Direct pages</span>
         {workspaceApps.filter((app) => app.id !== "terminal").map((app) => (

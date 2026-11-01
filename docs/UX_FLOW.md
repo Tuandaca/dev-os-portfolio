@@ -1,6 +1,6 @@
 # DEV.OS experience flow
 
-Status: Phase 2 specification, 2026-11-01. This document describes future interactions; the current workspace remains a lightweight content switcher.
+Status: Phase 2 specification with Phase 3 workspace and Phase 4 landing/boot implemented, 2026-11-01.
 
 ## Entry points
 
@@ -42,7 +42,7 @@ The command palette and launcher are dialogs or menus with accessible names, key
 
 ## Boot and motion
 
-Boot is a brief visual transition, not a loading gate. Navigation to the workspace begins promptly. A Skip button is visible and keyboard reachable from the first frame. `prefers-reduced-motion: reduce` skips camera movement, typing effects, and timed boot. If the user skips once in a session, subsequent entries can go directly to the workspace; do not persist this choice across visits in Phase 2. Animation must not delay content or cause focus to jump. Screen readers receive only a simple transition status, not a stream of decorative terminal lines.
+Boot is a brief visual transition, not a loading gate. The Skip link is visible and keyboard reachable before the animation starts and navigates immediately. `prefers-reduced-motion: reduce` bypasses WebGL and timed boot. The current implementation does not persist a skip preference. A one-time session flag focuses the workspace heading after client navigation; no-JavaScript links still navigate normally. Screen readers receive one concise transition status, while decorative terminal lines are hidden from them.
 
 ## Mobile and fallback
 

@@ -1,6 +1,6 @@
 # DEV.OS software architecture
 
-Status: Phase 2 design specification, 2026-11-01. The recruiter pages and typed CV content already exist. The cinematic scene and interactive OS described here are future work.
+Status: Phase 2 design specification with Phase 3 OS and Phase 4 cinematic implementation notes, 2026-11-01. Recruiter pages and typed CV content remain the source of truth.
 
 ## Architectural rule
 
@@ -25,8 +25,8 @@ flowchart LR
 | Routes | `src/app/` has `/`, `/workspace`, `/projects`, `/projects/[slug]`, `/about`, `/experience`, `/skills`, `/contact`, `/resume` | Keep page modules as Server Components unless an interaction needs a Client Component. Add route metadata and stable deep links. |
 | Verified content | `src/content/profile.ts`, `experience.ts`, `skills.ts`, `projects.ts` | Server-readable source for pages, app views, and metadata. `docs/CONTENT_SOURCE.md` records provenance. |
 | Shared UI | `src/components/portfolio/` and Phase 2 primitives in `src/components/ui/` | Accessible links, buttons, surfaces, status labels, and key hints; no OS state in base primitives. |
-| OS shell | `/workspace` is currently a lightweight content switcher | Future `src/components/os/` owns desktop, windows, launcher, taskbar, command palette, terminal interface. |
-| Cinematic scene | No R3F scene yet | Future `src/components/scene/` owns Canvas, laptop model, camera, loading, static fallback. It contains no portfolio facts. |
+| OS shell | `/workspace` uses `src/components/os/` for desktop, windows, launcher, taskbar, command palette, and finite terminal | Keep the OS state within the workspace; direct recruiter routes remain independent. |
+| Cinematic scene | `src/components/scene/laptop-scene.tsx` owns the procedural R3F laptop and camera; `src/components/landing/` owns the CSS fallback, boot state, navigation, and error boundary | Scene emits only ready/phase/error callbacks and contains no portfolio facts. |
 | Case studies | Typed project summaries | Future `src/content/case-studies/` may hold reviewed MDX bodies. Keep project metadata in `projects.ts`. |
 | Diagrams | No interactive diagrams | Future `src/components/diagrams/` may use React Flow only when a diagram adds project evidence; provide equivalent text/static SVG. |
 | Tests | Vitest and Testing Library configured | Add behavior-focused Vitest and Playwright tests when those behaviors ship. |
@@ -89,7 +89,7 @@ Installed versions came from `npm ls --depth=0` on 2026-11-01. Planned compatibi
 | App framework | Next 15.5.28, React/React DOM 19.3.1, TypeScript strict, Tailwind 3.4.19 | Keep App Router and current Tailwind major. Match `@next/mdx` to the installed Next version if added. |
 | Workspace state | Zustand 5.0.16 | Client workspace store; no RSC store access. |
 | Motion | `framer-motion` 12.43.0 | Future motion uses `motion` and `motion/react` in Client Components, following [Motion installation](https://motion.dev/docs/react-installation). Migrate deliberately; avoid two animation APIs without need. |
-| WebGL | Three 0.173.0 | [R3F installation](https://r3f.docs.pmnd.rs/getting-started/installation) pairs Fiber 9 with React 19. npm metadata: Fiber 9.8.2 accepts React `>=19 <19.4` and Three `>=0.156`; Drei 10.7.9 accepts React `^19`, Fiber `^9`, Three `>=0.159`. These peer ranges include installed versions, pending real build verification. R3F 10 needs a Three upgrade according to its [migration guide](https://r3f.docs.pmnd.rs/next/migration/v10). |
+| WebGL | Three 0.173.0, Fiber 9.8.2, Drei 10.7.9 | [R3F installation](https://r3f.docs.pmnd.rs/getting-started/installation) pairs Fiber 9 with React 19; installed peer ranges fit React 19.3.1 and Three 0.173.0. The Phase 4 production build and browser Canvas path passed. R3F 10 migration is outside this milestone. |
 | Architecture diagrams | None | `@xyflow/react` only for evidence-backed interactive diagrams. The package's 12.x peer range includes React 19; verify in build. See [React Flow documentation](https://reactflow.dev/learn). |
 | Case-study prose | Typed TypeScript summaries; no MDX runtime | `@next/mdx`, `@mdx-js/loader`, `@mdx-js/react`, and `mdx-components.tsx` only when reviewed narratives exist. Follow the [Next MDX guide](https://nextjs.org/docs/app/guides/mdx). Keep metadata/provenance in TypeScript. |
 | Tests | Vitest 3.2.7, jsdom, Testing Library | Add `@playwright/test` for route, keyboard, reduced-motion, and fallback journeys. Follow [Playwright installation](https://playwright.dev/docs/intro). |
@@ -97,9 +97,9 @@ Installed versions came from `npm ls --depth=0` on 2026-11-01. Planned compatibi
 
 ## Loading and performance policy
 
-Show a static, meaningful hero and navigation before the 3D bundle loads. Mount the scene as a client-only dynamic island after interaction or when idle/visible; keep a static image/CSS laptop alternative. If WebGL is absent, context creation fails, resources fail, or the user requests reduced motion, use the fallback and keep every route available. The browser never needs the scene to render resume, contact, or project HTML.
+The hero and navigation render as HTML before the 3D bundle loads. After hydration, desktop clients with motion allowed and a WebGL context load the scene dynamically; a CSS laptop remains available as a static fallback. Missing WebGL, module/Canvas errors, slow scene loading, reduced motion, and narrow viewports preserve the `/workspace` link and recruiter routes. The browser never needs the scene to render resume, contact, or project HTML.
 
-Proposed targets for the later scene, to validate on real devices: load no 3D code on recruiter routes; measure and cap hero asset transfer; avoid continuous rendering when idle or hidden; pause on `visibilitychange`; cap device pixel ratio; compress model/textures; check main-thread responsiveness on a midrange mobile device. These are targets, not measured current performance. Defer React Flow and MDX bundles to pages that use them.
+The scene has no external model or texture files, uses 40 instanced keyboard keys, caps device pixel ratio at 1.5, renders on demand, and pauses animation when the document is hidden. It does not load on recruiter routes or narrow/reduced-motion landing paths. Local production Chromium measurements are in `docs/PROGRESS.md`; midrange device FPS and Core Web Vitals remain unmeasured. Defer React Flow and MDX bundles to pages that use them.
 
 Use Motion for short UI transitions. Never animate layout in a way that hides focus or delays controls. Prefer CSS for simple hover/focus states.
 

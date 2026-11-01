@@ -3,6 +3,7 @@ import { profile } from "@/content/profile";
 import { skillGroups } from "@/content/skills";
 import { workExperience } from "@/content/experience";
 import { ProjectsContent } from "@/components/portfolio/content-sections";
+import { LandingExperience } from "@/components/landing/landing-experience";
 
 const primaryAction = "inline-flex items-center justify-center rounded-md border border-dev-accent bg-dev-accent px-5 py-3 font-mono text-sm font-semibold text-dev-bg hover:bg-dev-text focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-dev-accent";
 const secondaryAction = "inline-flex items-center justify-center rounded-md border border-dev-border-bright px-5 py-3 font-mono text-sm text-dev-text hover:border-dev-accent hover:text-dev-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-dev-accent";
@@ -10,36 +11,38 @@ const secondaryAction = "inline-flex items-center justify-center rounded-md bord
 export default function Home() {
   return (
     <div className="space-y-20">
-      <section className="grid min-h-[520px] items-center gap-10 border-b border-dev-border/80 pb-16 lg:grid-cols-[1.5fr_1fr]">
-        <div>
-          <p className="font-mono text-xs uppercase tracking-[0.28em] text-dev-accent">DEV.OS / Portfolio</p>
-          <h1 className="mt-5 text-5xl font-semibold leading-[1.05] tracking-tight sm:text-7xl">
-            {profile.name}<span className="text-dev-accent">.</span>
-          </h1>
-          <p className="mt-5 text-xl font-medium text-dev-text sm:text-2xl">{profile.headline}</p>
-          <p className="mt-6 max-w-2xl text-base leading-8 text-dev-secondary sm:text-lg">{profile.summary}</p>
-          <div className="mt-8 flex flex-wrap gap-3">
-            <Link href="/workspace" className={primaryAction}>Enter DEV.OS →</Link>
-            <Link href="/projects" className={secondaryAction}>Browse portfolio</Link>
-          </div>
-          <p className="mt-5 text-sm text-dev-secondary">
-            Prefer a quick scan? <Link href="/resume" className="text-dev-accent underline-offset-4 hover:underline focus-visible:underline">View resume</Link>
-            <span aria-hidden="true"> · </span>
-            <a href={profile.githubUrl} target="_blank" rel="noopener noreferrer" className="text-dev-accent underline-offset-4 hover:underline focus-visible:underline">GitHub ↗</a>
-          </p>
-        </div>
-        <div className="dev-panel rounded-2xl p-6 font-mono text-sm shadow-window sm:p-8">
+      <section className="min-h-[520px] border-b border-dev-border/80 pb-16">
+        <LandingExperience
+          copy={
+            <>
+              <p className="font-mono text-xs uppercase tracking-[0.28em] text-dev-accent">DEV.OS / Portfolio</p>
+              <h1 className="mt-5 text-5xl font-semibold leading-[1.05] tracking-tight sm:text-7xl">
+                {profile.name}<span className="text-dev-accent">.</span>
+              </h1>
+              <p className="mt-5 text-xl font-medium text-dev-text sm:text-2xl">{profile.headline}</p>
+              <p className="mt-6 max-w-2xl text-base leading-8 text-dev-secondary sm:text-lg">{profile.summary}</p>
+            </>
+          }
+          quickLinks={
+            <p>
+              Prefer a quick scan? <Link href="/resume" className="text-dev-accent underline-offset-4 hover:underline focus-visible:underline">View resume</Link>
+              <span aria-hidden="true"> · </span>
+              <a href={profile.githubUrl} target="_blank" rel="noopener noreferrer" className="text-dev-accent underline-offset-4 hover:underline focus-visible:underline">GitHub ↗</a>
+            </p>
+          }
+        />
+        <div className="dev-panel mt-8 rounded-2xl p-6 font-mono text-sm shadow-window sm:p-8">
           <p className="text-xs uppercase tracking-[0.22em] text-dev-accent">Profile / Overview</p>
-          <dl className="mt-8 space-y-5">
-            <div className="border-b border-dev-border pb-4">
+          <dl className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+            <div>
               <dt className="text-xs uppercase text-dev-muted">Focus</dt>
               <dd className="mt-1 text-dev-text">Full-stack applications · REST APIs · software architecture · AI/RAG</dd>
             </div>
-            <div className="border-b border-dev-border pb-4">
+            <div>
               <dt className="text-xs uppercase text-dev-muted">Experience context</dt>
               <dd className="mt-1 text-dev-text">{profile.experienceContext}</dd>
             </div>
-            <div className="border-b border-dev-border pb-4">
+            <div>
               <dt className="text-xs uppercase text-dev-muted">Based in</dt>
               <dd className="mt-1 text-dev-text">{profile.location}</dd>
             </div>

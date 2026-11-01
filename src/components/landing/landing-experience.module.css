@@ -1,0 +1,189 @@
+.stage {
+  position: relative;
+  isolation: isolate;
+  min-height: 390px;
+  overflow: hidden;
+  border: 1px solid rgb(var(--dev-color-border-bright) / 0.7);
+  border-radius: 1.5rem;
+  background: radial-gradient(ellipse at 58% 48%, rgb(var(--dev-color-accent) / 0.1), transparent 48%),
+    linear-gradient(145deg, rgb(var(--dev-color-elevated)), rgb(var(--dev-color-bg)) 70%);
+  box-shadow: 0 32px 90px -45px rgb(0 0 0 / 0.9), inset 0 0 60px rgb(var(--dev-color-accent) / 0.025);
+}
+
+.stage::before {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  content: "";
+  background-image: linear-gradient(rgb(var(--dev-color-accent) / 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(var(--dev-color-accent) / 0.04) 1px, transparent 1px);
+  background-size: 32px 32px;
+  mask-image: linear-gradient(to bottom, transparent, black 42%, transparent);
+}
+
+.halo {
+  position: absolute;
+  top: 10%;
+  left: 12%;
+  width: 76%;
+  height: 66%;
+  border-radius: 50%;
+  background: rgb(var(--dev-color-accent) / 0.075);
+  filter: blur(62px);
+}
+
+.desk {
+  position: absolute;
+  right: -20%;
+  bottom: -34%;
+  left: -20%;
+  height: 57%;
+  transform: perspective(500px) rotateX(62deg);
+  border-top: 1px solid rgb(var(--dev-color-border-bright) / 0.5);
+  background: linear-gradient(90deg, rgb(var(--dev-color-surface)), rgb(var(--dev-color-bg)) 65%);
+  box-shadow: 0 -12px 50px rgb(var(--dev-color-accent) / 0.045);
+}
+
+.staticLaptop {
+  position: absolute;
+  top: 49%;
+  left: 50%;
+  width: min(78%, 410px);
+  height: 220px;
+  transform: translate(-50%, -50%) perspective(700px) rotateY(-12deg);
+  transition: opacity 220ms ease;
+}
+
+.staticHidden {
+  opacity: 0;
+}
+
+.screen {
+  position: absolute;
+  top: 4%;
+  left: 9%;
+  width: 82%;
+  height: 76%;
+  overflow: hidden;
+  border: 9px solid rgb(var(--dev-color-bg));
+  border-bottom-width: 13px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, rgb(var(--dev-color-elevated)), rgb(var(--dev-color-bg)));
+  box-shadow: 0 0 0 2px rgb(var(--dev-color-border-bright)), 0 0 44px rgb(var(--dev-color-accent) / 0.15);
+}
+
+.screenHeader {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+  height: 20px;
+  padding-left: 10px;
+  border-bottom: 1px solid rgb(var(--dev-color-border));
+}
+
+.screenHeader span {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: rgb(var(--dev-color-border-bright));
+}
+
+.screenText {
+  margin: 22px 18px 12px;
+  color: rgb(var(--dev-color-accent));
+  font-family: var(--dev-font-mono);
+  font-size: 14px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.screenText span {
+  color: rgb(var(--dev-color-muted));
+  font-size: 9px;
+  font-weight: 400;
+}
+
+.screenLine,
+.screenLineShort,
+.screenLineTiny {
+  height: 3px;
+  margin: 8px 18px;
+  border-radius: 2px;
+  background: rgb(var(--dev-color-accent) / 0.32);
+}
+
+.screenLine { width: 68%; }
+.screenLineShort { width: 46%; }
+.screenLineTiny { width: 29%; }
+
+.base {
+  position: absolute;
+  right: 0;
+  bottom: 6%;
+  left: 0;
+  height: 44px;
+  transform: perspective(440px) rotateX(62deg);
+  transform-origin: center top;
+  border: 2px solid rgb(var(--dev-color-border-bright));
+  border-radius: 6px 6px 14px 14px;
+  background: linear-gradient(rgb(var(--dev-color-elevated)), rgb(var(--dev-color-bg)));
+  box-shadow: 0 18px 36px rgb(0 0 0 / 0.6);
+}
+
+.keyboard {
+  position: absolute;
+  inset: 7px 10%;
+  opacity: 0.5;
+  background-image: repeating-linear-gradient(90deg, rgb(var(--dev-color-border-bright)) 0 10px, transparent 10px 14px),
+    repeating-linear-gradient(rgb(var(--dev-color-border-bright)) 0 3px, transparent 3px 11px);
+  background-blend-mode: multiply;
+}
+
+.canvas {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+.boot {
+  position: absolute;
+  right: 12px;
+  bottom: 46px;
+  left: 12px;
+  z-index: 2;
+  max-width: 270px;
+  padding: 12px 16px;
+  border: 1px solid rgb(var(--dev-color-accent) / 0.42);
+  border-radius: 8px;
+  background: rgb(var(--dev-color-bg) / 0.92);
+  box-shadow: 0 0 28px rgb(var(--dev-color-accent) / 0.1);
+  color: rgb(var(--dev-color-accent));
+  font-family: var(--dev-font-mono);
+  font-size: 10px;
+  line-height: 1.7;
+}
+
+.boot p:first-child { margin-bottom: 6px; font-weight: 700; letter-spacing: 0.14em; }
+
+.caption {
+  position: absolute;
+  right: 20px;
+  bottom: 18px;
+  left: 20px;
+  z-index: 3;
+  display: flex;
+  justify-content: space-between;
+  color: rgb(var(--dev-color-muted));
+  font-family: var(--dev-font-mono);
+  font-size: 9px;
+  letter-spacing: 0.15em;
+}
+
+@media (max-width: 767px) {
+  .stage { min-height: 315px; }
+  .staticLaptop { height: 188px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .staticLaptop { transition: none; }
+}

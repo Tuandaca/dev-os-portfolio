@@ -2,7 +2,7 @@
 
 ## Current phase
 
-Phase 4 cinematic laptop and boot experience in progress (2026-11-01). Phases 0‚Äì3 remain synchronized on `main`; no deployment was performed.
+Phase 4 cinematic laptop and boot experience implemented and verified locally (2026-11-01); `main` commit and push are pending. No deployment was performed.
 
 ## Completed features
 
@@ -14,10 +14,11 @@ Phase 4 cinematic laptop and boot experience in progress (2026-11-01). Phases 0‚
 - Phase 3 adds an allowlisted app registry and scoped Zustand store; a desktop with windows, taskbar, launcher, command palette, finite local terminal, desktop drag, mobile single-panel view, safe deep links, and HTML direct-route fallback. The landing page offers prominent workspace and recruiter paths. Apps reuse the CV-backed content modules.
 - The recruiter content pass renders all requested case-study sections in semantic HTML with source labels and explicit TODO gaps. Project pages use typed slugs and metadata; source/demo links appear only when verified data supplies them. About uses the CV's concrete architecture and review practices.
 - Four project studies now cover Cinema, the owner-confirmed Travel AI/Multimodal RAG identity, GymLVL, and grouped Business Website Projects. Gym/business are labeled public repository samples; unknown individual contributions and results remain explicit TODOs. The source ledger records pinned repository revisions and the v1/v2 demo distinction.
+- Phase 4 landing integration keeps the existing recruiter HTML and workspace routes, adds an immediately usable Skip link, a short boot overlay, lazy desktop scene, static mobile/reduced-motion/WebGL fallback, and one-time workspace heading focus after intro navigation. The 3D laptop uses self-authored procedural meshes without external assets; final visual tuning and full regression verification remain in progress.
 
 ## Active task IDs
 
-- P4-00 architecture contract; P4-01 procedural laptop scene; P4-02 cinematic landing and skippable transition; P4-03 focused QA; P4-04 integration, verification, and Git synchronization.
+- P4-04 integration, staged review, and Git synchronization.
 
 ## Decisions
 
@@ -29,6 +30,8 @@ Phase 4 cinematic laptop and boot experience in progress (2026-11-01). Phases 0‚
 - The Travel AI repository has apparent exposed credentials. Keep its project link off the website until owner review and credential rotation; present safe CV and code facts without quoting secrets.
 - The owner confirmed that ‚ÄúMultimodal RAG Q&A System‚Äù names the same project as the CV's Travel AI capstone. This confirms identity, not a multimodal retrieval implementation.
 - The owner requested one working branch: `main`. Feature branches were fast-forwarded into `main` and their merged local branch pointers removed; future work stays on `main` unless the owner changes this instruction.
+- Phase 4 architect contract: keep the landing page's HTML content and routes independent of a client-only lazy scene; use a local idle/opening/boot/entering transition, ordinary `/workspace` links, immediate Skip, one-time destination focus, and a bounded fallback timer. The procedural scene owns only 3D rendering and emits callbacks; the UI owns navigation and failure handling.
+- Phase 4 laptop and desk geometry is self-authored in code; no third-party model, texture, or separate asset license is involved. The screen uses restrained green illumination with high-contrast terminal marks. The scene is decorative; the HTML controls and recruiter content remain primary.
 - The existing `tuandacadev.vercel.app` portfolio returned HTTP 200, but it is not verified as the DEV.OS deployment. Keep page-specific SEO titles/descriptions and Open Graph metadata; defer canonical URLs and a deployment sitemap until the DEV.OS public URL is known.
 - Keep recruiter routes server-rendered and directly addressable. Treat the workspace and cinematic scene as progressive enhancements over the same typed content.
 - Defer R3F, Drei, React Flow, MDX, GSAP, and any Motion package migration until their corresponding implementation needs. Playwright was added for Phase 3 browser behavior. React 19.3.1 and Three 0.173.0 fit the checked Fiber 9.8.2/Drei 10.7.9 peer ranges; install-time verification is still required.
@@ -48,6 +51,9 @@ Phase 4 cinematic laptop and boot experience in progress (2026-11-01). Phases 0‚
 - Recruiter QA passed two content invariants and five browser journeys: seven main routes, navigation, four slugs with nine headings, unknown-slug 404, Travel/v2 link withholding, Gym TODO labels, PDF download event and SHA256, and 320px overflow checks. No implementation blocker reported.
 - Full integration: `npm run lint`, `npm run typecheck`, `npm test` (14 passing across five files), `npm run test:e2e` (11 passing across recruiter and workspace journeys), and `npm run build` passed. The build generated 15 static pages, including Cinema, Travel AI, GymLVL, and Business Websites; `/workspace` remains server-rendered on demand.
 - P3-S01 synchronization rerun: lint and typecheck passed; 14 Vitest and 11 Playwright tests passed; production build passed with 15 generated static pages and `/workspace` rendered on demand. `git diff --check` and credential-pattern scan of changed files passed before the push.
+- Phase 4 focused browser QA: six cinematic journeys passed in headless Chromium, including animated entry/boot and focus, immediate Skip, reduced motion, simulated missing WebGL, 320 px mobile, and no-JavaScript links. The initial heading-focus race was fixed by clearing the one-time session flag after the scheduled focus frame; retest passed. These checks do not establish FPS or Core Web Vitals.
+- Phase 4 full integration: `npm run lint`, `npm run typecheck`, `npm test` (14 passing), `npm run test:e2e` (17 passing, including all six new cinematic journeys and all existing workspace/recruiter journeys), and `npm run build` passed. Build generated 15 static pages and kept `/workspace` dynamic. Visual checks of desktop idle and boot states in Chromium confirmed the black laptop, opening screen, restrained lighting, and readable HTML controls.
+- Local production Chromium measurement at 1365 √ó 850: reduced-motion landing used no Canvas, loaded 6 Next.js JavaScript resources totaling 110,246 encoded bytes, and reached fallback state at ~223 ms; motion-enabled desktop loaded 16 resources totaling 348,036 encoded bytes and reached scene ready at ~980 ms. These localhost observations are environment-specific and do not establish device FPS or Core Web Vitals. Next build reports `/` first-load JavaScript at 110 kB, versus 107 kB on recruiter routes.
 
 ## Git state
 
@@ -70,8 +76,9 @@ Phase 4 cinematic laptop and boot experience in progress (2026-11-01). Phases 0‚
 - No blocker to Phase 1 completion. Automatic approval review rejected recursive cleanup of a disposable test fixture at `C:\Users\tuand\AppData\Local\Temp\devos_phase1_test_f851c0c5b55c4c279504c560defd3bf8` despite path verification; it remains outside the repository. Reparse-point path bypasses, retention validation, and task uninstall identity gaps were fixed and retested.
 - The public Travel AI repository appears to expose Neo4j credentials. Do not quote or copy them; the owner should rotate any live credential and review public history. The new site can present the case study without a prominent repository link while this remains unresolved.
 - Current production dependency audit reports one moderate Next and one high PostCSS advisory; the suggested fix upgrades Next to 16.4.3 (major). Review separately before release; no unrelated dependency migration was made during Phase 3.
+- After Fiber/Drei installation, `npm audit --omit=dev` still reports those same two production advisories and no new production dependency finding. Full `npm audit` reports 19 findings, including two critical findings in dev-only Vitest/tinypool tooling. Resolve the audit separately before deployment or CI hardening; no Next/Vitest major upgrade was mixed into Phase 4.
 - Business v2's listed demo returned HTTP 200 but displayed a mechanical-keyboard site that does not match its current generic business landing source; withhold that demo link pending reconciliation.
 
 ## Exact next action
 
-- Complete the Phase 4 architecture contract, then implement the procedural scene and accessible landing transition with nonoverlapping file ownership. Run targeted fallback tests, full checks, and production build; review staged diff and secrets before a coherent `main` commit and push. Keep recruiter content, CV, and the existing OS behavior intact.
+- Review the Phase 4 staged diff and secret scan, commit the verified implementation on `main`, fetch `origin/main` to confirm ancestry, and push without force. Then record the final remote commit and clean status. Do not deploy. Next milestone: evidence-led case-study polish and audit remediation before release.
