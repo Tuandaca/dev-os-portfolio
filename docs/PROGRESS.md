@@ -2,7 +2,7 @@
 
 ## Current phase
 
-Phase 5A dependency hardening, content verification, and release review verified locally (2026-11-01); `main` synchronization remains in progress. No deployment was performed.
+Phase 5A dependency hardening, content verification, and release review completed and synchronized to public `main` (2026-11-01). No deployment was performed.
 
 ## Completed features
 
@@ -19,7 +19,7 @@ Phase 5A dependency hardening, content verification, and release review verified
 
 ## Active task IDs
 
-- P5A-06 verified Git synchronization.
+- None. Phase 5A implementation and synchronization tasks are complete; external Travel AI credential remediation remains an owner action before its repository link can be published.
 
 ## Decisions
 
@@ -75,6 +75,7 @@ Phase 5A dependency hardening, content verification, and release review verified
 - Phase 4 preflight: clean `main` at `0362d40a7b051f6c07225e9184c655d523b6efca`, matching `origin/main` and a fresh remote HEAD check. Backup scripts and `docs/BACKUP.md` are present; the scheduled task remains uninstalled by design. Installed React 19.3.1 and Three 0.173.0 satisfy npm peer ranges for Fiber 9.8.2 and Drei 10.7.9. A fresh production `npm audit` still reports one moderate Next and one high transitive PostCSS advisory; the suggested Next fix is a major-version upgrade, to review separately from Phase 4 scene integration.
 - Phase 4 checkpoint commit `b67a698` and verified implementation commit `b81c10399c3c61d5da53d7288cb32cd094b553b0` were pushed normally to the verified public `Tuandaca/dev-os-portfolio` `main`. A fresh fetch confirmed ancestry before push; `git ls-remote` confirmed `origin/main` at `b81c103`. Only local `main` is active, with a clean working tree after the implementation push. No force-push, deployment, or production-site change occurred.
 - Phase 5A preflight: clean `main` at `76f5ba15f6a51fa0bea0c5f6d426c14a81e22d13`, matching a fresh `origin/main` check. The Phase 4 cinematic/recruiter/workspace tests are present. Initial full `npm audit` reports 19 findings (16 moderate, one high, two critical); the critical paths are dev-only Vitest/tinypool, while `npm audit --omit=dev` previously reported Next/PostCSS production findings. No dependency or external repository has been changed yet.
+- Phase 5A staged review covered the explicit 16-file implementation set; `git diff --cached --check` passed and a credential-pattern scan found zero hits in 876 added lines. `gh auth status` confirmed Tuandaca; `gh repo view` confirmed the public repository and default `main`; fresh fetch and remote-ref check confirmed `origin/main` at `76f5ba1` was the ancestor of local HEAD. Verified implementation commit `f4a5b7aec623415e0f6f5c98cf5de91d3d55bd0b` was pushed normally to `origin/main`, and `git ls-remote` returned that exact ref. No force-push or deployment occurred.
 
 ## Blockers and release gates
 
@@ -85,4 +86,4 @@ Phase 5A dependency hardening, content verification, and release review verified
 
 ## Exact next action
 
-- Review the Phase 5A staged diff and scan for secrets; verify the public `Tuandaca/dev-os-portfolio` `main` target and fast-forward ancestry, then commit and push normally. Record the final commit, remote ref, and clean-tree status. Do not deploy or change the Travel AI repository.
+- Before Phase 5B, the owner should rotate/revoke potentially exposed Travel AI Neo4j and Google/Gemini credentials, inspect provider activity, and clean current public files; keep its DEV.OS repository link withheld until verified. Plan any subsequent DEV.OS work from clean `main`, prioritizing remaining dev-tool advisories and the owner-confirmed deployment URL before release metadata or deployment.

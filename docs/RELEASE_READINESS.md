@@ -1,6 +1,6 @@
 # DEV.OS release readiness
 
-Status: Phase 5A local review completed, 2026-11-01; Git synchronization is tracked in `docs/PROGRESS.md`. This is **not** deployment approval. The existing `tuandacadev.vercel.app` site is not verified as a DEV.OS deployment target.
+Status: Phase 5A review completed and implementation synchronized to public `main`, 2026-11-01. This is **not** deployment approval. The existing `tuandacadev.vercel.app` site is not verified as a DEV.OS deployment target.
 
 ## Reviewed surfaces
 
@@ -23,7 +23,7 @@ Status: Phase 5A local review completed, 2026-11-01; Git synchronization is trac
 2. **Completed locally:** clean `npm ci`, lint, typecheck, 14 Vitest tests, 19 Playwright tests (recruiter, workspace, cinematic/fallback, release paths), and production build passed.
 3. **Completed locally:** four case studies were rechecked against `docs/CONTENT_SOURCE.md`; safe source/demo links and withheld Travel AI and Business Website v2 links were rechecked. No unsupported TODO became a claim.
 4. Confirm the owner-selected DEV.OS deployment URL and the exact public content scope before setting canonical/sitemap/robots metadata. Production domain changes and deployment need separate authorization.
-5. Inspect the staged diff, scan source for accidental secrets, verify `origin/main` ancestry, and push only verified changes without force.
+5. **Completed for Phase 5A implementation:** explicit staged diff review, zero credential-pattern hits, verified `origin/main` ancestry, and normal push of `f4a5b7a` with matching remote ref. Repeat these checks for every future change.
 
 ## Current known decisions
 
