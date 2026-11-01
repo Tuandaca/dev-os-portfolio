@@ -1,31 +1,14 @@
-# DEV.OS — Task Tracking Matrix
+# DEV.OS tasks
 
-## Task Status Legend
-- `TODO`: Not started
-- `IN_PROGRESS`: Currently being executed
-- `BLOCKED`: Waiting on external dependency or blocker
-- `DONE`: Completed and verified with test/execution evidence
+Allowed states: `TODO`, `IN_PROGRESS`, `BLOCKED`, `DONE`. Mark `DONE` only after the acceptance check is verified.
 
----
-
-## Task Backlog
-
-| Task ID | Description | Owner | Status | Dependencies | Files / Directories Owned | Acceptance Criteria | Verification Results | Related Commits |
-|---|---|---|---|---|---|---|---|---|
-| **TASK-001** | Repository & Environment Audit | Orchestrator | DONE | None | `.gitignore`, `docs/` | Environment tools verified, git initialized, gh verified | Node v22.17.1, npm 11.12.1, git init main, gh logged in as Tuandaca | Initial |
-| **TASK-002** | Independent Backup System & Scripts | Orchestrator | DONE | TASK-001 | `scripts/` | Backup, install, restore scripts created and test verified | Snapshot created (SHA256 verified), integrity check passed, extraction to isolation dir verified | Local |
-| **TASK-003** | Next.js 15 & Dependencies Setup | Orchestrator | DONE | TASK-001 | `package.json`, `tsconfig.json`, `tailwind.config.*` | Clean install of Next.js, React 19/18, Tailwind, Lucide, Zustand, Motion | Installed 226 packages without error | Local |
-| **TASK-004** | Remote GitHub Repository Setup | Orchestrator | DONE | TASK-001 | `.git` | Remote `Tuandaca/dev-os-portfolio` created & configured | Created public repo https://github.com/Tuandaca/dev-os-portfolio | Local |
-| **TASK-005** | Design Tokens & Global CSS System | UI/UX Agent | IN_PROGRESS | TASK-003 | `src/styles/`, `src/theme/`, `tailwind.config.ts` | Cyber-minimalist theme (#080D12, #111C24, #294039, #6EE7A0) | Pending | - |
-| **TASK-006** | OS Window Management & Desktop Shell | UI/UX Agent | IN_PROGRESS | TASK-005 | `src/components/os/`, `src/store/` | Zustand window manager, taskbar, dock, minimize/maximize/close, dragging, focus | Pending | - |
-| **TASK-007** | Command Palette & Keyboard Shortcuts | UI/UX Agent | TODO | TASK-006 | `src/components/os/CommandPalette.tsx` | Cmd+K / Ctrl+K navigation, quick launch, accessible focus | Pending | - |
-| **TASK-008** | Portfolio Content Schemas & Verified Data | Content Agent | TODO | TASK-003 | `src/data/`, `src/types/` | Real project data (RAG, Cinema, GymLVL, Business), experience, skills | Pending | - |
-| **TASK-009** | Portfolio Apps Implementation | Content Agent | TODO | TASK-006, TASK-008 | `src/components/apps/` | About.exe, Projects.exe, Stack.monitor, Experience.log, Contact.sh | Pending | - |
-| **TASK-010** | Terminal Emulator (Developer Terminal) | UI/UX Agent | TODO | TASK-006, TASK-008 | `src/components/apps/TerminalApp.tsx` | Allowlisted commands (help, whoami, projects, skills, experience, architecture, ai, contact, clear), history, autocomplete | Pending | - |
-| **TASK-011** | Interactive Architecture Lab | Content Agent | TODO | TASK-006, TASK-008 | `src/components/apps/ArchitectureLab.tsx` | Interactive system diagrams, data flow, service boundaries | Pending | - |
-| **TASK-012** | AI Agent Control Room Visualization | Content Agent | TODO | TASK-006, TASK-008 | `src/components/apps/AgentControl.tsx` | Multi-agent orchestrator -> worker workflow visualizer | Pending | - |
-| **TASK-013** | 3D Cinematic Laptop Scene & Transitions | 3D Engineer | TODO | TASK-006 | `src/components/3d/` | Three.js / R3F laptop model & canvas, opening sequence, skip option, static fallback | Pending | - |
-| **TASK-014** | Recruiter Mode & Direct SEO Routes | Content Agent | TODO | TASK-008, TASK-009 | `src/app/(recruiter)/`, `src/components/recruiter/` | Fast accessible UI for recruiters (`/`, `/about`, `/projects`, `/projects/[slug]`, `/contact`, `/resume`) | Pending | - |
-| **TASK-015** | Testing Suite Setup & Verification | QA Agent | TODO | TASK-006, TASK-009, TASK-010 | `src/__tests__/`, `vitest.config.ts` | Vitest unit tests for OS store, window operations, terminal parser, content rendering | Pending | - |
-| **TASK-016** | Production Build & Performance Audit | QA Agent | TODO | All | Build pipeline, metadata | Zero build errors, Next.js static export / production build passing, SEO tags, performance checks | Pending | - |
-| **TASK-017** | GitHub Milestone Synchronization & Documentation | Orchestrator | TODO | TASK-016 | `README.md`, `docs/` | Final sync to `Tuandaca/dev-os-portfolio`, verified push, deployment instructions | Pending | - |
+| Task ID | Task | Owner | Status | Dependencies | File ownership | Acceptance criteria | Verification results |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| P0-01 | Next.js foundation and agent definitions | Main agent | DONE | None | `src/app/`, configs, `.cursor/agents/`, `AGENTS.md` | App Router shell builds; lint and strict typecheck pass; five agents defined | Previous checkpoint: lint, typecheck, build passed; independent QA checked agent files |
+| P1-01 | Audit repository and GitHub identity | Main agent | DONE | P0-01 | Read-only | Confirm local status, authenticated account, repository owner, visibility, branch, and remote URL | `gh auth status` = Tuandaca; `gh repo view` = PUBLIC, main; origin URL matches target |
+| P1-02 | Production ignore policy | Main agent | DONE | P1-01 | `.gitignore` | Exclude secrets, dependencies, caches, outputs, databases, logs, and snapshots; keep source/docs/scripts trackable | `git check-ignore --no-index`: 9 excluded and 8 retained samples passed, including actual backup naming |
+| P1-03 | Verify remote and safe synchronization | Main agent | IN_PROGRESS | P1-01, P1-02, P1-04, P1-05 | Git metadata and final commit | Inspect target content, staged diff, and secret scan; commit coherent verified changes and push without force | Pending |
+| P1-04 | Independent checkpoint backup | Backup subagent | DONE | P1-01 | `scripts/backup-checkpoint.ps1`, `scripts/install-backup-task.ps1`, `scripts/restore-checkpoint.ps1`, `docs/BACKUP.md` | Five-minute task support, 24 successful snapshots, secret exclusions, manifest/integrity, isolated restore, no overlap; safe tests | Windows PowerShell fixture tests passed: create/verify/restore, exclusions, lock, validated retention, junction rejection, tamper refusal, task identity; independent QA found no blocker; no task installed |
+| P1-05 | Persistent checkpoint records | Main agent | IN_PROGRESS | P1-01 | `docs/PROGRESS.md`, `docs/TASKS.md` | Required fields, write-before-work and write-after-work updates | Initial Phase 1 IN_PROGRESS records persisted before implementation |
+| P1-06 | Final Phase 1 verification | Main agent | IN_PROGRESS | P1-02, P1-04 | Read-only checks and progress records | Source intact; build and focused backup tests pass; schedule state and push status recorded | Build passed; manual `-VerifyOnly` checked archive and file SHA256; final staged diff, secret scan, and push pending |
+| P2-01 | Verify portfolio claims | Portfolio engineer | TODO | P1-06 | `src/data/`, `src/types/portfolio.ts` | Evidence before publishing claims or metrics | Not started |

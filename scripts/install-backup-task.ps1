@@ -1,89 +1,112 @@
-# ==============================================================================
-# DEV.OS Independent Backup System - Task Scheduler Installer
-# ==============================================================================
 [CmdletBinding()]
-param (
-    [ValidateSet("Install", "Uninstall", "Status", "RunOnce")]
+param(
+    [ValidateSet("Status", "Install", "Uninstall", "RunOnce")]
     [string]$Action = "Status",
+    [ValidateRange(1, 1440)]
     [int]$IntervalMinutes = 5,
+    [ValidateRange(1, 10000)]
+    [int]$RetentionCount = 24,
     [string]$TaskName = "DEV_OS_Portfolio_AutoBackup",
+    [string]$TaskPath = "\",
     [string]$ProjectRoot = "",
     [string]$BackupDir = ""
 )
 
 $ErrorActionPreference = "Stop"
+$description = "DEV.OS backup checkpoint (managed by scripts/install-backup-task.ps1)"
+$scriptPath = [IO.Path]::GetFullPath((Join-Path $PSScriptRoot "backup-checkpoint.ps1"))
 
-if ([string]::IsNullOrWhiteSpace($ProjectRoot)) {
-    if ($PSScriptRoot) {
-        $ProjectRoot = (Resolve-Path (Join-Path $PSScriptRoot "..")).Path
-    } else {
-        $ProjectRoot = (Get-Location).Path
+function Assert-NoReparseAncestors {
+    param([string]$Path)
+    $full = [IO.Path]::GetFullPath($Path)
+    $current = [IO.Path]::GetPathRoot($full)
+    foreach ($segment in ($full.Substring($current.Length) -split '[\\/]')) {
+        if (-not $segment) { continue }
+        $current = Join-Path $current $segment
+        if (Test-Path -LiteralPath $current) {
+            $attributes = [IO.File]::GetAttributes($current)
+            if (($attributes -band [IO.FileAttributes]::ReparsePoint) -ne 0) {
+                throw "Reparse-point path is not allowed: $current"
+            }
+        }
     }
 }
 
+if ([string]::IsNullOrWhiteSpace($ProjectRoot)) {
+    $ProjectRoot = Join-Path $PSScriptRoot ".."
+}
 if ([string]::IsNullOrWhiteSpace($BackupDir)) {
     $BackupDir = Join-Path $env:USERPROFILE ".dev_os_backups"
 }
+$ProjectRoot = [IO.Path]::GetFullPath($ProjectRoot)
+$BackupDir = [IO.Path]::GetFullPath($BackupDir)
+Assert-NoReparseAncestors $ProjectRoot
+Assert-NoReparseAncestors $BackupDir
+Assert-NoReparseAncestors $scriptPath
+if (-not $TaskPath.StartsWith('\') -or -not $TaskPath.EndsWith('\') -or
+    $TaskPath.Contains('..')) {
+    throw "TaskPath must be an absolute Task Scheduler folder ending in a backslash."
+}
+$arguments = '-NoProfile -NonInteractive -ExecutionPolicy Bypass -WindowStyle Hidden ' +
+    '-File "' + $scriptPath + '" -ProjectRoot "' + $ProjectRoot +
+    '" -BackupDir "' + $BackupDir + '" -RetentionCount ' + $RetentionCount
 
-$ScriptPath = Join-Path (Split-Path -Parent $MyInvocation.MyCommand.Path) "backup-checkpoint.ps1"
-if (-not (Test-Path $ScriptPath)) {
-    $ScriptPath = Join-Path $ProjectRoot "scripts\backup-checkpoint.ps1"
+if ($Action -eq "RunOnce") {
+    & $scriptPath -ProjectRoot $ProjectRoot -BackupDir $BackupDir -RetentionCount $RetentionCount
+    return
 }
 
-function Get-ScheduledTaskStatus {
-    param ([string]$Name)
-    $task = Get-ScheduledTask -TaskName $Name -ErrorAction SilentlyContinue
-    return $task
+if (-not (Get-Command Get-ScheduledTask -ErrorAction SilentlyContinue)) {
+    throw "Windows ScheduledTasks cmdlets are unavailable on this host."
 }
+$existing = Get-ScheduledTask -TaskName $TaskName -TaskPath $TaskPath -ErrorAction SilentlyContinue
 
 switch ($Action) {
     "Status" {
-        $task = Get-ScheduledTaskStatus -Name $TaskName
-        if ($task) {
-            Write-Host "Task '$TaskName' exists." -ForegroundColor Green
-            Write-Host "State: $($task.State)"
-            Write-Host "Triggers:"
-            $task.Triggers | ForEach-Object { Write-Host " - Repetition Interval: $($_.Repetition.Interval)" }
+        if (-not $existing) {
+            Write-Output "Task '$TaskPath$TaskName' is not installed."
         } else {
-            Write-Host "Task '$TaskName' is currently NOT installed." -ForegroundColor Yellow
-            Write-Host "To install, execute:"
-            Write-Host "  .\scripts\install-backup-task.ps1 -Action Install -IntervalMinutes 5" -ForegroundColor Cyan
+            Write-Output "Task '$TaskPath$TaskName' is $($existing.State)."
+            Write-Output "Description: $($existing.Description)"
+            foreach ($trigger in $existing.Triggers) {
+                Write-Output "Repetition interval: $($trigger.Repetition.Interval)"
+            }
         }
     }
-
-    "RunOnce" {
-        Write-Host "Executing single test backup..." -ForegroundColor Cyan
-        & "$ScriptPath" -ProjectRoot $ProjectRoot -BackupDir $BackupDir
-    }
-
     "Install" {
-        $existing = Get-ScheduledTaskStatus -Name $TaskName
         if ($existing) {
-            Write-Host "Task '$TaskName' already exists. Removing previous registration..." -ForegroundColor Yellow
-            Unregister-ScheduledTask -TaskName $TaskName -Confirm:$false
+            throw "Task '$TaskPath$TaskName' already exists. Inspect it before any explicit uninstall; no task was replaced."
         }
-
-        $ActionCmd = "PowerShell.exe"
-        $Arguments = "-ExecutionPolicy Bypass -NoProfile -WindowStyle Hidden -File `"$ScriptPath`" -ProjectRoot `"$ProjectRoot`" -BackupDir `"$BackupDir`""
-        
-        $TaskAction = New-ScheduledTaskAction -Execute $ActionCmd -Argument $Arguments
-        $TaskTrigger = New-ScheduledTaskTrigger -Once -At (Get-Date).AddMinutes(1) -RepetitionInterval (New-TimeSpan -Minutes $IntervalMinutes) -RepetitionDuration ([TimeSpan]::MaxValue)
-        $TaskSettings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -StartWhenAvailable -MultipleInstances IgnoreNew
-
-        Register-ScheduledTask -TaskName $TaskName -Action $TaskAction -Trigger $TaskTrigger -Settings $TaskSettings -Description "DEV.OS Autonomous Independent Snapshot Task (Every $IntervalMinutes min)" | Out-Null
-
-        Write-Host "Successfully registered scheduled task '$TaskName'!" -ForegroundColor Green
-        Write-Host "Interval: Every $IntervalMinutes minutes"
-        Write-Host "Backup Destination: $BackupDir"
+        if (-not (Test-Path -LiteralPath $ProjectRoot -PathType Container) -or
+            -not (Test-Path -LiteralPath $scriptPath -PathType Leaf)) {
+            throw "Project directory or backup script is missing."
+        }
+        $projectPrefix = $ProjectRoot.TrimEnd('\', '/') + [IO.Path]::DirectorySeparatorChar
+        $backupPrefix = $BackupDir.TrimEnd('\', '/') + [IO.Path]::DirectorySeparatorChar
+        if ($BackupDir.StartsWith($projectPrefix, [StringComparison]::OrdinalIgnoreCase) -or
+            $ProjectRoot.StartsWith($backupPrefix, [StringComparison]::OrdinalIgnoreCase) -or
+            $BackupDir.Equals($ProjectRoot, [StringComparison]::OrdinalIgnoreCase)) {
+            throw "Backup directory and project directory must be separate."
+        }
+        $taskAction = New-ScheduledTaskAction -Execute "powershell.exe" -Argument $arguments
+        $trigger = New-ScheduledTaskTrigger -Once -At (Get-Date).AddMinutes(1) -RepetitionInterval (New-TimeSpan -Minutes $IntervalMinutes) -RepetitionDuration (New-TimeSpan -Days 3650)
+        $settings = New-ScheduledTaskSettingsSet -StartWhenAvailable -MultipleInstances IgnoreNew -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries
+        Register-ScheduledTask -TaskName $TaskName -TaskPath $TaskPath -Action $taskAction -Trigger $trigger -Settings $settings -Description $description | Out-Null
+        Write-Output "Installed '$TaskPath$TaskName' for every $IntervalMinutes minute(s). Backup destination: $BackupDir"
     }
-
     "Uninstall" {
-        $existing = Get-ScheduledTaskStatus -Name $TaskName
-        if ($existing) {
-            Unregister-ScheduledTask -TaskName $TaskName -Confirm:$false
-            Write-Host "Scheduled task '$TaskName' has been removed." -ForegroundColor Green
-        } else {
-            Write-Host "Task '$TaskName' was not found." -ForegroundColor Yellow
+        if (-not $existing) {
+            Write-Output "Task '$TaskPath$TaskName' is not installed."
+            return
         }
+        if ($existing.Description -ne $description -or
+            $existing.TaskPath -ne $TaskPath -or
+            @($existing.Actions).Count -ne 1 -or
+            $existing.Actions[0].Execute -ine "powershell.exe" -or
+            $existing.Actions[0].Arguments -cne $arguments) {
+            throw "Task identity or action does not match this installer; refusing to remove it."
+        }
+        Unregister-ScheduledTask -TaskName $TaskName -TaskPath $TaskPath -Confirm:$false
+        Write-Output "Removed '$TaskPath$TaskName'. Existing snapshots were not deleted."
     }
 }
