@@ -9,6 +9,7 @@ const caseStudyHeadings = [
 ];
 
 test("recruiter routes have semantic content and navigation", async ({ page }) => {
+  test.setTimeout(60_000);
   for (const route of mainRoutes) {
     const response = await page.goto(route);
     expect(response?.status(), route).toBe(200);

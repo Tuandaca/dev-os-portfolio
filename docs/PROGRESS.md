@@ -2,7 +2,7 @@
 
 ## Current phase
 
-Phase 5A security, dependency hardening, content verification, and release readiness in progress (2026-11-01). Phase 4 remains synchronized on public `main`; no deployment was performed.
+Phase 5A dependency hardening, content verification, and release review verified locally (2026-11-01); `main` synchronization remains in progress. No deployment was performed.
 
 ## Completed features
 
@@ -15,10 +15,11 @@ Phase 5A security, dependency hardening, content verification, and release readi
 - The recruiter content pass renders all requested case-study sections in semantic HTML with source labels and explicit TODO gaps. Project pages use typed slugs and metadata; source/demo links appear only when verified data supplies them. About uses the CV's concrete architecture and review practices.
 - Four project studies now cover Cinema, the owner-confirmed Travel AI/Multimodal RAG identity, GymLVL, and grouped Business Website Projects. Gym/business are labeled public repository samples; unknown individual contributions and results remain explicit TODOs. The source ledger records pinned repository revisions and the v1/v2 demo distinction.
 - Phase 4 landing integration keeps the existing recruiter HTML and workspace routes, adds an immediately usable Skip link, a short boot overlay, lazy desktop scene, static mobile/reduced-motion/WebGL fallback, and one-time workspace heading focus after intro navigation. The 3D laptop uses self-authored procedural meshes without external assets; visual and regression verification passed in the Phase 4 checkpoint.
+- Phase 5A upgrades Vitest to 4.1.12 and PostCSS to 8.5.32 with a root override so Next 15 uses the patched same-major version. It adds a branded error/404 fallback, a setup README, release-readiness and sanitized Travel AI remediation notes, and a fresh source-evidence review. No public case-study claim changed because no new contribution or result evidence was found.
 
 ## Active task IDs
 
-- P5A-01 dependency audit and safe upgrades; P5A-02 read-only Travel AI credential audit; P5A-03 project evidence review; P5A-04 release engineering review; P5A-05 full regression and security review; P5A-06 verified Git synchronization.
+- P5A-06 verified Git synchronization.
 
 ## Decisions
 
@@ -32,6 +33,7 @@ Phase 5A security, dependency hardening, content verification, and release readi
 - The owner requested one working branch: `main`. Feature branches were fast-forwarded into `main` and their merged local branch pointers removed; future work stays on `main` unless the owner changes this instruction.
 - Phase 4 architect contract: keep the landing page's HTML content and routes independent of a client-only lazy scene; use a local idle/opening/boot/entering transition, ordinary `/workspace` links, immediate Skip, one-time destination focus, and a bounded fallback timer. The procedural scene owns only 3D rendering and emits callbacks; the UI owns navigation and failure handling.
 - Phase 4 laptop and desk geometry is self-authored in code; no third-party model, texture, or separate asset license is involved. The screen uses restrained green illumination with high-contrast terminal marks. The scene is decorative; the HTML controls and recruiter content remain primary.
+- Phase 5A keeps Next.js 15 and React 19. A same-major PostCSS override is used to remove the vulnerable nested 8.4.31 copy; Vitest 4.1.12 removes critical dev-only Vitest/tinypool findings. Remaining 14 moderate findings are in the ESLint/minimatch development chain; a major tooling migration was deferred because production dependencies audit clean and current lint passes. Use lint only on trusted project inputs until that chain is updated.
 - The existing `tuandacadev.vercel.app` portfolio returned HTTP 200, but it is not verified as the DEV.OS deployment. Keep page-specific SEO titles/descriptions and Open Graph metadata; defer canonical URLs and a deployment sitemap until the DEV.OS public URL is known.
 - Keep recruiter routes server-rendered and directly addressable. Treat the workspace and cinematic scene as progressive enhancements over the same typed content.
 - Defer R3F, Drei, React Flow, MDX, GSAP, and any Motion package migration until their corresponding implementation needs. Playwright was added for Phase 3 browser behavior. React 19.3.1 and Three 0.173.0 fit the checked Fiber 9.8.2/Drei 10.7.9 peer ranges; install-time verification is still required.
@@ -54,18 +56,19 @@ Phase 5A security, dependency hardening, content verification, and release readi
 - Phase 4 focused browser QA: six cinematic journeys passed in headless Chromium, including animated entry/boot and focus, immediate Skip, reduced motion, simulated missing WebGL, 320 px mobile, and no-JavaScript links. The initial heading-focus race was fixed by clearing the one-time session flag after the scheduled focus frame; retest passed. These checks do not establish FPS or Core Web Vitals.
 - Phase 4 full integration: `npm run lint`, `npm run typecheck`, `npm test` (14 passing), `npm run test:e2e` (17 passing, including all six new cinematic journeys and all existing workspace/recruiter journeys), and `npm run build` passed. Build generated 15 static pages and kept `/workspace` dynamic. Visual checks of desktop idle and boot states in Chromium confirmed the black laptop, opening screen, restrained lighting, and readable HTML controls.
 - Local production Chromium measurement at 1365 × 850: reduced-motion landing used no Canvas, loaded 6 Next.js JavaScript resources totaling 110,246 encoded bytes, and reached fallback state at ~223 ms; motion-enabled desktop loaded 16 resources totaling 348,036 encoded bytes and reached scene ready at ~980 ms. These localhost observations are environment-specific and do not establish device FPS or Core Web Vitals. Next build reports `/` first-load JavaScript at 110 kB, versus 107 kB on recruiter routes.
+- Phase 5A clean `npm ci` passed; `npm run lint`, `npm run typecheck`, `npm test` (14 passing), `npm run build` (15 static pages; workspace dynamic), and `npm run test:e2e` (19 passing) passed on the updated lockfile. Initial four-worker browser run had two timing failures under simultaneous dev compilation; the final two-worker run passed all 19 tests. New checks cover branded 404 fallback, contact actions/metadata, and keyboard skip navigation. Vitest emits a future native-config-loader warning; current tests pass.
+- Final local audit: `npm audit --omit=dev` reports zero findings; full `npm audit` reports 14 moderate dev-tool findings and zero high or critical. `npm ls` confirms Next uses PostCSS 8.5.32, Vitest and its mocker are 4.1.12, and tinypool is absent. The public resume SHA256 remains `2F7154E61F5DB72E9E272C9BA3F69A5D56836C1EB13185E7D918C1F79F10880A`.
 
 ## Git state
 
 - Earlier Phase 1 state: `main` tracked `origin/main`. Foundation commit `c8692b2` and Phase 1 implementation commit `55ad1e0` were pushed without force to the verified `Tuandaca/dev-os-portfolio` origin.
 - After the implementation push, local HEAD and remote `main` both matched `55ad1e02055b9e65fa4b297adbe10c5ba2f0e956`; the working tree was clean. This document records the verified completion state.
 - Staged diffs were reviewed and secret-pattern scans found no matches before both implementation commits.
-- Phase 2 content, CV asset, and pages are on local branch `codex/cv-content` based on `9f31975`. No Phase 2 push or deployment has occurred.
-- The design specification work starts from clean local branch `codex/phase2-design` at `353f16c`, preserving the CV content commit. No design changes have been pushed or deployed.
-- Phase 2 design branch `codex/phase2-design` ends at local commit `46e1d65` (`docs: specify DEV.OS architecture and visual foundations`); it has not been pushed or deployed.
-- Phase 2 audit confirmed clean `46e1d65`, the approved tokens/primitives/routes, and no Phase 2 scope drift. `gh auth status` confirms Tuandaca; `gh repo view` confirms the public `Tuandaca/dev-os-portfolio` repository with default `main`. Only local `main` tracks `origin/main`; the new `codex/phase3-core` branch has no upstream. No push or merge is authorized for this audit.
+- At the Phase 2 content checkpoint, CV asset and recruiter pages were on local `codex/cv-content` based on `9f31975`; they were later fast-forwarded and pushed to `main` in P3-S01.
+- The design specification started from clean local `codex/phase2-design` at `353f16c`, preserving the CV content commit, and ended at `46e1d65` (`docs: specify DEV.OS architecture and visual foundations`); it was later fast-forwarded and pushed to `main` in P3-S01.
+- At the Phase 2 audit, clean `46e1d65`, approved tokens/primitives/routes, and no design scope drift were confirmed. Authentication and the public Tuandaca origin/main were verified before Phase 3 began.
 - At the Phase 3 core checkpoint, `codex/phase3-core` started at `46e1d65` and had no upstream. Its local implementation commit was titled `feat: build DEV.OS core workspace`; remote `main` was then at `9f319750583faa62f9a1e3eb56fb35376fb45418`.
-- A local docs checkpoint titled `docs: record Phase 3 browser verification` records the full six-test browser rerun after the workspace commit; it has no remote push.
+- A docs checkpoint titled `docs: record Phase 3 browser verification` recorded the six-test browser rerun after the workspace commit; it was later included in the verified `main` push.
 - The recruiter content work started from clean local `codex/phase3-portfolio-content` at `e7f4880`; its implementation commit is `e583f9e` (`feat: complete sourced recruiter portfolio`).
 - P3-S01 preflight: clean `codex/phase3-portfolio-content` at `e583f9e`; `gh auth status` confirms Tuandaca; `gh repo view` confirms public `Tuandaca/dev-os-portfolio` with default `main`; fresh `git fetch origin main` confirmed `origin/main` at `9f31975` is an ancestor of HEAD. The phase branches form a linear commit chain; no remote Phase 2/3 branch exists. User authorized publishing all verified work to `main` and using `main` as the working branch.
 - P3-S01 completed: local `main` fast-forwarded from `9f31975` to `1a37499` and pushed normally to verified `origin/main`. `git ls-remote` confirmed the remote `main` ref at `1a37499d5d90a6dff38a314cca419b6760d1b2f3`; local `main` tracked the same commit with a clean tree. Four fully merged local feature branch pointers were deleted; the remote lists only `main`. No force-push, remote branch deletion, or deployment occurred.
@@ -73,14 +76,13 @@ Phase 5A security, dependency hardening, content verification, and release readi
 - Phase 4 checkpoint commit `b67a698` and verified implementation commit `b81c10399c3c61d5da53d7288cb32cd094b553b0` were pushed normally to the verified public `Tuandaca/dev-os-portfolio` `main`. A fresh fetch confirmed ancestry before push; `git ls-remote` confirmed `origin/main` at `b81c103`. Only local `main` is active, with a clean working tree after the implementation push. No force-push, deployment, or production-site change occurred.
 - Phase 5A preflight: clean `main` at `76f5ba15f6a51fa0bea0c5f6d426c14a81e22d13`, matching a fresh `origin/main` check. The Phase 4 cinematic/recruiter/workspace tests are present. Initial full `npm audit` reports 19 findings (16 moderate, one high, two critical); the critical paths are dev-only Vitest/tinypool, while `npm audit --omit=dev` previously reported Next/PostCSS production findings. No dependency or external repository has been changed yet.
 
-## Blockers
+## Blockers and release gates
 
-- No blocker to Phase 1 completion. Automatic approval review rejected recursive cleanup of a disposable test fixture at `C:\Users\tuand\AppData\Local\Temp\devos_phase1_test_f851c0c5b55c4c279504c560defd3bf8` despite path verification; it remains outside the repository. Reparse-point path bypasses, retention validation, and task uninstall identity gaps were fixed and retested.
-- The public Travel AI repository appears to expose Neo4j credentials. Do not quote or copy them; the owner should rotate any live credential and review public history. The new site can present the case study without a prominent repository link while this remains unresolved.
-- Current production dependency audit reports one moderate Next and one high PostCSS advisory; the suggested fix upgrades Next to 16.4.3 (major). Review separately before release; no unrelated dependency migration was made during Phase 3.
-- After Fiber/Drei installation, `npm audit --omit=dev` still reports those same two production advisories and no new production dependency finding. Full `npm audit` reports 19 findings, including two critical findings in dev-only Vitest/tinypool tooling. Resolve the audit separately before deployment or CI hardening; no Next/Vitest major upgrade was mixed into Phase 4.
+- The read-only Travel AI audit found two distinct Neo4j password candidates in current public material and five distinct Google/Gemini API-key candidates across current notebooks and historical environment files. Provider validity was not tested. The owner must rotate or revoke potentially live credentials, inspect provider activity, and clean current public files; keep the repository link withheld until remediation is verified. The public remediation note intentionally omits exact pointers while values may remain active.
+- Phase 5A replaced the Phase 4 Next/PostCSS and Vitest/tinypool audit findings: current production audit is zero and full audit has zero high/critical, with 14 moderate findings in development ESLint/minimatch dependencies. A compatible tooling migration remains a release follow-up; a zero production dependency audit does not certify the application as secure.
 - Business v2's listed demo returned HTTP 200 but displayed a mechanical-keyboard site that does not match its current generic business landing source; withhold that demo link pending reconciliation.
+- The public DEV.OS deployment URL is not verified, so canonical URLs and sitemap were not added. Deployment and production-domain changes remain unauthorized in this phase.
 
 ## Exact next action
 
-- Execute P5A-01 through P5A-05 with independent file ownership; resolve critical DEV.OS dependency findings where a compatible patch exists, document Travel AI remediation without changing that repository, verify project claims and release paths, then run full checks. Review staged diff and secrets before a coherent `main` commit and authorized push; do not deploy.
+- Review the Phase 5A staged diff and scan for secrets; verify the public `Tuandaca/dev-os-portfolio` `main` target and fast-forward ancestry, then commit and push normally. Record the final commit, remote ref, and clean-tree status. Do not deploy or change the Travel AI repository.

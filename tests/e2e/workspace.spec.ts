@@ -5,7 +5,7 @@ test("landing offers direct and workspace paths", async ({ page }) => {
   await expect(page.getByRole("link", { name: /Enter DEV\.OS/ })).toBeVisible();
   await expect(page.getByRole("link", { name: "Browse portfolio" })).toHaveAttribute("href", "/projects");
   await page.getByRole("link", { name: /Enter DEV\.OS/ }).click();
-  await expect(page).toHaveURL(/\/workspace$/);
+  await expect(page).toHaveURL(/\/workspace$/, { timeout: 15_000 });
   await expect(page.getByRole("heading", { name: "Explore DEV.OS" })).toBeVisible();
 });
 
