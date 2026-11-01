@@ -1,3 +1,5 @@
+import type { ReactElement } from "react";
+
 export type AppId =
   | "about"
   | "projects"
@@ -39,5 +41,5 @@ export interface TerminalCommand {
   command: string;
   description: string;
   usage?: string;
-  handler: (args: string[]) => string | JSX.Element;
+  handler: (args: string[]) => string | ReactElement;
 }
