@@ -1,0 +1,38 @@
+:root {
+  color-scheme: dark;
+  /* RGB channels keep Tailwind opacity modifiers compatible with the palette. */
+  --dev-color-bg: 8 13 18;          /* #080D12 */
+  --dev-color-surface: 17 28 36;    /* #111C24 */
+  --dev-color-elevated: 22 36 47;   /* #16242F */
+  --dev-color-border: 41 64 57;     /* #294039 */
+  --dev-color-border-bright: 61 98 87;
+  --dev-color-accent: 110 231 160; /* #6EE7A0 */
+  --dev-color-accent-dim: 34 197 94;
+  --dev-color-text: 228 242 237;   /* #E4F2ED */
+  --dev-color-secondary: 148 163 184;
+  --dev-color-muted: 120 138 157;  /* #788A9D; readable on surfaces */
+  --dev-color-cyan: 56 189 248;
+  --dev-color-amber: 251 191 36;
+  --dev-color-red: 248 113 113;
+  --dev-color-purple: 192 132 252;
+
+  --dev-font-sans: "Geist Sans", "Space Grotesk", Inter, Arial, Helvetica, sans-serif;
+  --dev-font-mono: "JetBrains Mono", "Geist Mono", Consolas, "Courier New", monospace;
+
+  --dev-radius-control: 0.375rem;
+  --dev-radius-panel: 0.75rem;
+  --dev-radius-window: 1rem;
+  --dev-duration-fast: 120ms;
+  --dev-duration-standard: 180ms;
+  --dev-duration-reveal: 320ms;
+  --dev-shadow-window: 0 20px 40px -15px rgb(0 0 0 / 0.8), 0 0 0 1px rgb(var(--dev-color-border) / 0.6);
+  --dev-shadow-window-focus: 0 25px 50px -12px rgb(0 0 0 / 0.9), 0 0 20px rgb(var(--dev-color-accent) / 0.2), 0 0 0 1px rgb(var(--dev-color-border-bright));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --dev-duration-fast: 0ms;
+    --dev-duration-standard: 0ms;
+    --dev-duration-reveal: 0ms;
+  }
+}

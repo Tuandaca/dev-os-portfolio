@@ -2,7 +2,7 @@
 
 ## Current phase
 
-Phase 2 complete locally — CV-driven content integration and recruiter pages (2026-11-01).
+Phase 2 design specification complete locally — software architecture, UX, and visual system (2026-11-01). The CV-driven content integration remains complete locally.
 
 ## Completed features
 
@@ -10,10 +10,11 @@ Phase 2 complete locally — CV-driven content integration and recruiter pages (
 - Phase 1 read-only audit found local `main` at `14e3282` before the foundation commit; `origin` points to `https://github.com/Tuandaca/dev-os-portfolio.git`; authenticated GitHub account is `Tuandaca`; target repository is PUBLIC and its default branch is `main`.
 - Phase 1 `.gitignore`, independent backup scripts, and backup instructions were implemented and verified. The scheduled task was deliberately not installed.
 - Phase 2 CV-based profile, dated work roles, skills, education, certification, and two sourced project case studies are in `src/content/`. Recruiter pages and a lightweight workspace view use these modules; the legacy data file remains unused.
+- Phase 2 design specifications cover route and state boundaries, landing/boot/workspace/recruiter flows, content provenance, accessibility, reduced motion, WebGL fallback, and later milestones. CSS/Tailwind tokens and five semantic UI primitives are in place; no full OS or scene was added.
 
 ## Active task IDs
 
-- None. Phase 3 work remains TODO in `docs/TASKS.md`.
+- None. Phase 3–5 implementation milestones remain TODO in `docs/TASKS.md`.
 
 ## Decisions
 
@@ -23,6 +24,8 @@ Phase 2 complete locally — CV-driven content integration and recruiter pages (
 - Use the supplied one-page CV as the baseline for owner identity, experience, skills, education, and certification. Keep its two years of hands-on project experience distinct from employment dates.
 - The owner approved publishing the original CV including its contact details. Do not substitute legacy contact data.
 - The Travel AI repository has apparent exposed credentials. Keep its project link off the website until owner review and credential rotation; present safe CV and code facts without quoting secrets.
+- Keep recruiter routes server-rendered and directly addressable. Treat the workspace and cinematic scene as progressive enhancements over the same typed content.
+- Defer R3F, Drei, React Flow, MDX, Playwright, GSAP, and any Motion package migration until their corresponding implementation needs. React 19.3.1 and Three 0.173.0 fit the checked Fiber 9.8.2/Drei 10.7.9 peer ranges; install-time verification is still required.
 
 ## Test and build results
 
@@ -32,13 +35,16 @@ Phase 2 complete locally — CV-driven content integration and recruiter pages (
 - Windows Task Scheduler query: `DEV_OS_Portfolio_AutoBackup` is not installed; no permanent task was created.
 - Previous dependency audit found two production advisories in Next.js's bundled PostCSS; review before release.
 - Phase 2: CV extracted; Cinema repository audited at `c2581f9` and Travel AI at `398222f`. Original PDF copied to `public/resume/` with SHA256 matching the supplied file. `npm run lint`, `npm run typecheck`, and `npm run build` passed after the UI changes; all recruiter routes and the PDF returned HTTP 200. Independent content/route QA found no blocker. New content had no legacy-claim or credential-pattern matches.
+- Phase 2 design integration: `npm run lint`, `npm run typecheck`, and `npm run build` passed; build generated 13 static pages including both project slugs. `git diff --check` passed. `npm test` found no test files and exited 1; no behavior tests were added for design-only primitives.
 
 ## Git state
 
-- Branch: `main`, tracking `origin/main`. Foundation commit `c8692b2` and Phase 1 implementation commit `55ad1e0` were pushed without force to the verified `Tuandaca/dev-os-portfolio` origin.
+- Earlier Phase 1 state: `main` tracked `origin/main`. Foundation commit `c8692b2` and Phase 1 implementation commit `55ad1e0` were pushed without force to the verified `Tuandaca/dev-os-portfolio` origin.
 - After the implementation push, local HEAD and remote `main` both matched `55ad1e02055b9e65fa4b297adbe10c5ba2f0e956`; the working tree was clean. This document records the verified completion state.
 - Staged diffs were reviewed and secret-pattern scans found no matches before both implementation commits.
 - Phase 2 content, CV asset, and pages are on local branch `codex/cv-content` based on `9f31975`. No Phase 2 push or deployment has occurred.
+- The design specification work starts from clean local branch `codex/phase2-design` at `353f16c`, preserving the CV content commit. No design changes have been pushed or deployed.
+- Current branch is `codex/phase2-design`. The Phase 2 design checkpoint is recorded in a local commit titled `docs: specify DEV.OS architecture and visual foundations`; it has not been pushed or deployed.
 
 ## Blockers
 
@@ -47,4 +53,4 @@ Phase 2 complete locally — CV-driven content integration and recruiter pages (
 
 ## Exact next action
 
-- Review and rotate any live Neo4j credentials in the Travel AI repository before promoting its code link; continue with the Phase 3 interactive workspace milestone after this local content change is reviewed.
+- After reviewing this local design commit, begin P3-01: define the workspace app registry, safe deep-link parser, and client-only state using the verified content. Review and rotate any live Travel AI credentials before promoting that repository link.
