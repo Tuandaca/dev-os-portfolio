@@ -1,7 +1,7 @@
 import { expect, test } from "@playwright/test";
 
 test.describe("cinematic landing", () => {
-  test("the laptop opens and hands focus to the workspace", async ({ page }) => {
+  test("the laptop opens and hands focus to the universe", async ({ page }) => {
     await page.setViewportSize({ width: 1365, height: 850 });
     await page.emulateMedia({ reducedMotion: "no-preference" });
     await page.goto("/");
@@ -13,8 +13,8 @@ test.describe("cinematic landing", () => {
     await page.getByRole("link", { name: /Enter DEV\.OS/ }).click();
     await expect(page.getByRole("link", { name: /Skip intro/i })).toBeVisible();
     await expect(page.locator("[data-intro-phase]")).toHaveAttribute("data-intro-phase", "boot", { timeout: 5_000 });
-    await expect(page).toHaveURL(/\/workspace$/, { timeout: 15_000 });
-    await expect(page.getByRole("heading", { name: "Explore DEV.OS" })).toBeFocused();
+    await expect(page).toHaveURL(/\/universe$/, { timeout: 15_000 });
+    await expect(page.getByRole("heading", { name: "Explore the DEV.OS universe" })).toBeFocused();
 
     await page.goBack();
     await expect(page).toHaveURL(/\/$/);
@@ -33,8 +33,8 @@ test.describe("cinematic landing", () => {
     await expect(skip).toBeVisible();
     await skip.focus();
     await page.keyboard.press("Enter");
-    await expect(page).toHaveURL(/\/workspace$/);
-    await expect(page.getByRole("heading", { name: "Explore DEV.OS" })).toBeFocused();
+    await expect(page).toHaveURL(/\/universe$/);
+    await expect(page.getByRole("heading", { name: "Explore the DEV.OS universe" })).toBeFocused();
   });
 
   test("reduced motion bypasses WebGL and the timed intro", async ({ page }) => {
@@ -46,8 +46,8 @@ test.describe("cinematic landing", () => {
     await expect(page.locator("[data-scene-status]")).toHaveAttribute("data-scene-status", "fallback");
     await expect(page.locator("canvas")).toHaveCount(0);
     await page.getByRole("link", { name: /Enter DEV\.OS/ }).click();
-    await expect(page).toHaveURL(/\/workspace$/);
-    await expect(page.getByRole("heading", { name: "Explore DEV.OS" })).toBeFocused();
+    await expect(page).toHaveURL(/\/universe$/);
+    await expect(page.getByRole("heading", { name: "Explore the DEV.OS universe" })).toBeFocused();
   });
 
   test("unavailable WebGL leaves both ordinary routes usable", async ({ page }) => {
@@ -64,8 +64,8 @@ test.describe("cinematic landing", () => {
     await expect(page.locator("[data-scene-status]")).toHaveAttribute("data-scene-status", "fallback");
     await expect(page.getByRole("link", { name: "Browse portfolio" })).toHaveAttribute("href", "/projects");
     await page.getByRole("link", { name: /Enter DEV\.OS/ }).click();
-    await expect(page).toHaveURL(/\/workspace$/);
-    await expect(page.getByRole("heading", { name: "Explore DEV.OS" })).toBeFocused();
+    await expect(page).toHaveURL(/\/universe$/);
+    await expect(page.getByRole("heading", { name: "Explore the DEV.OS universe" })).toBeFocused();
   });
 
   test("mobile renders a static hero and keeps recruiter navigation readable", async ({ page }) => {
@@ -91,6 +91,9 @@ test.describe("cinematic landing", () => {
       await expect(page.getByRole("heading", { name: /Ngo Anh Tuan/ })).toBeVisible();
       await expect(page.locator("canvas")).toHaveCount(0);
       await page.getByRole("link", { name: /Enter DEV\.OS/ }).click();
+      await expect(page).toHaveURL(/\/universe$/);
+      await expect(page.getByRole("heading", { name: "Explore the DEV.OS universe" })).toBeVisible();
+      await page.locator("main").getByRole("link", { name: /Quick View/ }).first().click();
       await expect(page).toHaveURL(/\/workspace$/);
       await expect(page.getByRole("heading", { name: "Explore DEV.OS" })).toBeVisible();
 

@@ -3,6 +3,7 @@ import Link from "next/link";
 import { profile } from "@/content/profile";
 
 const navigation = [
+  { href: "/universe", label: "3D Universe" },
   { href: "/about", label: "About" },
   { href: "/experience", label: "Experience" },
   { href: "/projects", label: "Projects" },
@@ -43,7 +44,8 @@ export function SiteShell({ children }: { children: ReactNode }) {
           <p>{profile.name} / {profile.headline}</p>
           <div className="flex items-center gap-5">
             <a href={profile.githubUrl} target="_blank" rel="noopener noreferrer" className="hover:text-dev-accent focus-visible:text-dev-accent">GitHub ↗</a>
-            <Link href="/workspace" className="hover:text-dev-accent focus-visible:text-dev-accent">DEV.OS workspace →</Link>
+            <Link href="/universe" className="hover:text-dev-accent focus-visible:text-dev-accent">3D Universe →</Link>
+            <Link href="/workspace" className="hover:text-dev-accent focus-visible:text-dev-accent">Quick View →</Link>
           </div>
         </div>
       </footer>

@@ -1,18 +1,19 @@
 # DEV.OS — Inside a Developer's Mind
 
-DEV.OS is the portfolio of Ngo Anh Tuan (Tuandaca). It offers ordinary, directly addressable recruiter pages alongside an optional browser desktop and a cinematic laptop introduction. The portfolio content is grounded in the owner-provided CV and reviewed project repositories; unknown contributions and results are marked TODO in the case studies.
+DEV.OS is the portfolio of Ngo Anh Tuan (Tuandaca). It offers ordinary, directly addressable recruiter pages alongside an immersive 3D workstation, a 2D Quick View desktop, and a cinematic laptop introduction. The portfolio content is grounded in the owner-provided CV and reviewed project repositories; unknown contributions and results are marked TODO in the case studies.
 
 ## Explore the site
 
 | Route | Purpose |
 | --- | --- |
 | `/` | Professional introduction and featured work |
+| `/universe` | Optional 3D workstation with CV-backed skill exploration and clearly conceptual system flows |
 | `/projects` and `/projects/[slug]` | Selected projects and evidence-led case studies |
 | `/about`, `/experience`, `/skills` | Profile, dated roles, education, and technology inventory |
 | `/resume`, `/contact` | Owner-approved CV download and contact actions |
-| `/workspace` | Interactive DEV.OS desktop; also reachable directly |
+| `/workspace` | Interactive 2D Quick View desktop; also reachable directly |
 
-The laptop animation is optional. Mobile, reduced-motion, no-JavaScript, and WebGL-failure paths retain ordinary links. The Travel AI source link is intentionally withheld pending credential remediation; the Business Website v2 demo is withheld pending source-to-deployment verification.
+The laptop and 3D workstation are optional. Mobile, reduced-motion, no-JavaScript, WebGL-failure, and manually selected static-view paths retain ordinary links and usable skill controls. The Travel AI source link is intentionally withheld pending credential remediation; the Business Website v2 demo is withheld pending source-to-deployment verification.
 
 ## Run locally
 
@@ -41,7 +42,7 @@ npm run build
 ## Content and project boundaries
 
 - `src/content/` contains the profile, dated experience, skills, and project data. [Content provenance](docs/CONTENT_SOURCE.md) records the CV and repository evidence behind public claims.
-- `src/app/` owns the direct recruiter routes. `src/components/os/` owns the interactive workspace. `src/components/scene/` owns the procedural laptop; `src/components/landing/` owns its accessible entry and fallbacks.
+- `src/app/` owns the direct recruiter and universe routes. `src/components/os/` owns the 2D desktop. `src/components/scene/` owns the procedural laptop and spatial workstation; `src/components/landing/` and `src/components/immersive/` own their accessible controls and fallbacks.
 - `docs/PROGRESS.md` and `docs/TASKS.md` are persistent checkpoints. Read them and `AGENTS.md` before starting work.
 - The original English CV in `public/resume/` is public with the owner's explicit approval, including its contact information. Do not add private credentials or unpublished contact data to source files.
 

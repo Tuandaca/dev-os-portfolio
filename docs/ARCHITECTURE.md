@@ -1,6 +1,6 @@
 # DEV.OS software architecture
 
-Status: Phase 2 design specification with Phase 3 OS and Phase 4 cinematic implementation notes, 2026-11-01. Recruiter pages and typed CV content remain the source of truth.
+Status: Phase 2 design specification with Phase 3 OS, Phase 4 cinematic, and Phase 5B immersive workspace implementation notes, 2026-11-01. Recruiter pages and typed CV content remain the source of truth.
 
 ## Architectural rule
 
@@ -123,3 +123,51 @@ Use Motion for short UI transitions. Never animate layout in a way that hides fo
 Suggested implementation dependencies: finish Phase 2 tokens, primitive semantics, and route specification before the OS shell; build the OS app registry and deep-link parser before windows, launcher, palette, or terminal; complete keyboard and fallback behavior before adding cinematic entry; review each case-study claim before MDX or React Flow rendering. The scene can be developed independently after the static landing contract is stable, then integrated only after performance and reduced-motion checks. No later milestone is a prerequisite for the existing recruiter routes.
 
 Keep dependencies and completion evidence in `docs/TASKS.md`; record measured results in `docs/PROGRESS.md`. Do not convert design targets into completed claims.
+
+## Phase 5B immersive workspace contract (2026-11-01)
+
+Phase 5B adds `/universe` as the optional 3D-first route. The existing `/workspace` is the 2D **Quick View**; `/projects`, `/about`, `/skills`, `/resume`, and `/contact` remain ordinary server-rendered pages. The landing laptop's Enter and Skip paths may lead to `/universe`, but the HTML recruiter links and Quick View link must work before scene loading and when JavaScript or WebGL is unavailable. Keep the Phase 4 laptop scene intact; the new environment lives under `src/components/scene/immersive/` and loads only on `/universe`.
+
+```mermaid
+flowchart LR
+  Home["HTML landing + laptop"] --> Universe["/universe: HTML shell"]
+  Home --> Quick["/workspace: 2D Quick View"]
+  Home --> Recruiter[Direct recruiter routes]
+  Universe --> Nav[HTML view controls and detail panels]
+  Nav --> Scene[Lazy R3F spatial workstation]
+  Scene -->|selection callback| Nav
+  Universe --> Quick
+  Universe --> Recruiter
+  Skills[src/content/skills.ts] --> Mapping[Typed skill-cluster mapping]
+  Mapping --> Nav
+  Mapping --> Scene
+```
+
+### Scene graph and ownership
+
+| Boundary | Owner | Contract |
+| --- | --- | --- |
+| `/universe` page and shell | UI engineer | Server-readable heading, route metadata, direct links, lazy scene decision, fallback and live HTML panel. Own camera-view state and keyboard focus; no OS-store reuse. |
+| Spatial workstation | 3D engineer | Procedural desk, monitor, signal paths, skill nodes and contact horizon in one Canvas. Own geometry, materials, lighting, fixed camera targets, and frame invalidation. No portfolio facts or direct navigation. |
+| Skill mapping | Portfolio engineer | Six stable IDs: `frontend`, `backend`, `data`, `ai`, `architecture`, `workflow`. Map only CV-backed `skillGroups` items; no inferred proficiency, seniority, results, or live telemetry. |
+| QA | QA reviewer | Exercise view changes, object selection, fallback, keyboard and touch equivalents, direct routes, and existing cinematic/OS regressions. |
+
+The scene's public props are `view`, `activeSkillId`, `onSelectView`, `onSelectSkill`, `onReady`, and `onError`. `view` is one of `overview | skills | systems | contact`; the shell passes a valid value and owns state. Mesh clicks emit selection callbacks. The shell renders the same actions as visible HTML buttons and the selected information in semantic HTML. The Canvas is `aria-hidden`; it is never the only way to understand or operate a scene. A selected technical object opens a readable panel rather than relying on a tiny 3D label.
+
+| View | Camera intent | Interactive object and HTML result |
+| --- | --- | --- |
+| Overview | Three-quarter establishing shot of the desk and monitor array | Select the workstation to reveal the four destinations. |
+| Skills | Dolly toward the six structured signal nodes | Select a node to read its verified skill list and practical explanation. |
+| Systems | Lateral move toward a connected monitor and data path | Select the flow console to reveal a **conceptual** API → service → database explanation; it is not a live or project-specific topology. |
+| Contact | Pull back to a calm terminal/contact surface | HTML actions link to Resume, GitHub, Contact, and Quick View. |
+
+Use fixed camera positions and look targets with bounded easing; avoid free-orbit navigation that can hide content or break mobile layout. A view change replaces any in-flight camera transition. Pause animation and invalidate calls while the page is hidden. Respect reduced motion by snapping to a final camera target or using the static shell. Do not mount a second Canvas for detail panels. Pointer interactions should have a visible cursor or affordance, but the HTML controls are the authoritative keyboard/touch route.
+
+### Loading, failure, and performance targets
+
+- Render the page heading, direct navigation, selected panel, and fallback illustration as HTML before importing the 3D module. On narrow screens or `prefers-reduced-motion`, use the HTML experience by default; offer the same four destinations and six clusters without timed transitions. If WebGL probing, import, Canvas creation, or context operation fails, retain all controls and mark the visual unavailable once. An explicit “Use static view” action lets a capable desktop visitor remove the Canvas on demand.
+- Keep the scene procedural for this MVP: one Canvas, no downloaded models/textures, no new post-processing, physics, shaders, GSAP, or asset service. Reuse installed React 19, Three, Fiber and Drei. Use shared geometry/materials or instancing where many similar nodes appear. Cap DPR at 1.5 and use demand rendering with explicit invalidation only during bounded camera motion or interaction.
+- **Targets, not measured results:** scene ready within 2.5 seconds on a local desktop production run; camera transitions complete within 900 ms; at least 30 FPS during motion on a representative midrange device. Instrument browser timings/resource counts and report the actual observation and environment. Do not claim a Core Web Vitals or device-FPS pass from headless Chromium alone.
+- The scene must not delay direct recruiter navigation or the existing 2D workspace. Keep exact URL matching to known views and avoid arbitrary query-driven scene state. A scene exception must never break the route's HTML content.
+
+Phase 5B's MVP implements this shared spatial frame and one meaningful technical object plus initial skill selection. Richer RAG and multi-agent visualizations are later work; any demonstration added now must be labeled conceptual and must not imply a live production system. Production audit, Travel AI credential remediation, and deployment remain separate gates recorded in the release documents.

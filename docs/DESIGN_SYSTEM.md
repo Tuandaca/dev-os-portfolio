@@ -1,6 +1,6 @@
 # DEV.OS design system
 
-**Phase:** 2 — specification and foundations. **Visual direction:** Hacker Terminal × Developer Workstation × Premium Cyber Minimalism. The interface should feel like a precise developer tool with the ease of a conventional portfolio. Glow, scan lines, and decorative terminal copy are accents, never the reading surface.
+**Phase:** 2 foundations, extended for the Phase 5B immersive workstation. **Visual direction:** Hacker Terminal × Developer Workstation × Premium Cyber Minimalism. The interface should feel like a precise developer tool with the ease of a conventional portfolio. Glow, scan lines, and decorative terminal copy are accents, never the reading surface.
 
 ## Principles
 
@@ -86,3 +86,30 @@ Use 120 ms for state feedback, 180 ms for a small panel transition, and at most 
 ## QA bar
 
 Review at 320, 375, 768, and 1440 px widths; with keyboard only; at 200% zoom; with reduced motion; and with WebGL unavailable. Check visible focus, no clipped labels, readable text contrast, and a direct route to resume/contact. Later interactive components need targeted behavior and accessibility checks when implemented.
+
+## Phase 5B cinematic art direction
+
+The immersive workstation should read as a single designed place: black graphite desk and monitor forms, quiet metallic edges, one emerald signal line that connects interactive areas, and a deep background with restrained atmospheric falloff. The camera reveals coherent work zones rather than unrelated floating objects. Use the existing palette and typography; reserve bright green for selected stations, active data paths, and focus. Holographic panels should be sparse, flat enough to read, and never carry essential text solely in WebGL.
+
+### Composition and material language
+
+| Layer | Direction | Constraint |
+| --- | --- | --- |
+| Foreground | Geometric workstation edge and low keyboard silhouette create scale | Keep controls and HTML overlays clear of the focal monitor. |
+| Middle | One primary monitor or technical console, adjacent skill nodes, connected by a deliberate signal path | Make clickable objects large enough for mouse/touch and mirror each in HTML. |
+| Background | Dark architectural planes and subtle green bounce light establish depth | No particle cloud, random glyphs, or high-frequency flicker. |
+| Materials | Graphite roughness, metal trim, low-intensity emissive accents, limited glass-like surfaces | Do not add heavy transmission or bloom unless measured value justifies their cost. |
+
+The overview is a wide three-quarter shot; Skills moves closer to the node array; Systems frames the API flow console; Contact pulls back into a quiet final composition. All four retain the same spatial anchors, so motion communicates location. Camera easing should be deliberate and short, then settle completely. Selection can brighten one node and reveal an HTML panel; it should not trigger ambient motion across the whole scene. Conceptual flows carry a persistent “Conceptual demonstration” label in HTML.
+
+### Interface layer
+
+Use a clear top-level title and a four-stop navigation rail with text labels, active state, and 44 px minimum targets. Keep the selected detail panel in normal DOM flow with body text at 16 px or larger. Show the six skill groups as a visible list of buttons on the Skills stop; selection updates both panel content and 3D emphasis. Contact offers ordinary Resume, GitHub, Contact, and Quick View links. A scene loading or unavailable state is a concise status message; controls stay usable. Provide a visible manual static-view action while the Canvas is loading or active.
+
+The scene is decorative to assistive technology. Focus stays in HTML, with `aria-current` or equivalent state and one concise live announcement when selection changes. Do not put interactive semantics on an invisible Canvas. At 320–768 px, favor the static/HTML composition and stacked panels; do not shrink a desktop workstation to unreadable size. Reduced-motion users receive settled states with no camera travel. Existing recruiter routes and the 2D Quick View keep their semantic layout.
+
+### Motion and budget
+
+- Camera moves are the main animation; target 600–900 ms between fixed stops. Do not combine them with continuous parallax, particle loops, or unrelated panel transitions.
+- Keep hover/focus responses near existing 120–180 ms tokens. Selection must be obvious without color alone: pair accent lighting with a text label, active marker, and panel heading.
+- For Phase 5B validation, record actual scene-ready time, loaded JavaScript/resource count, WebGL fallback, and a browser screenshot at desktop and narrow viewport. These are measurements, not implied product guarantees. Midrange FPS and Core Web Vitals remain unverified until measured on suitable devices.

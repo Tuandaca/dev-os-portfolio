@@ -21,6 +21,7 @@ export default function Home() {
               </h1>
               <p className="mt-5 text-xl font-medium text-dev-text sm:text-2xl">{profile.headline}</p>
               <p className="mt-6 max-w-2xl text-base leading-8 text-dev-secondary sm:text-lg">{profile.summary}</p>
+              <p className="mt-5 max-w-xl border-l-2 border-dev-accent/70 pl-4 font-mono text-sm leading-6 text-dev-text">Explore the systems behind the work through an interactive 3D workstation, or go straight to the portfolio pages.</p>
             </>
           }
           quickLinks={
@@ -88,7 +89,8 @@ export default function Home() {
         </div>
         <div className="flex flex-wrap gap-3">
           <Link href="/contact" className={primaryAction}>Contact →</Link>
-          <Link href="/workspace" className={secondaryAction}>Open DEV.OS workspace</Link>
+          <Link href="/universe" className={secondaryAction}>Explore the 3D universe</Link>
+          <Link href="/workspace" className={secondaryAction}>Quick View / 2D workspace</Link>
         </div>
       </section>
     </div>

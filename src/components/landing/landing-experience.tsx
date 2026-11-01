@@ -48,9 +48,9 @@ function supportsWebGL() {
   }
 }
 
-function rememberWorkspaceArrival() {
+function rememberUniverseArrival() {
   try {
-    sessionStorage.setItem("dev-os-intro-arrival", "1");
+    sessionStorage.setItem("dev-os-universe-arrival", "1");
   } catch {
     // Browser storage can be disabled. Navigation remains available.
   }
@@ -75,12 +75,12 @@ export function LandingExperience({ copy, quickLinks }: { copy: ReactNode; quick
     watchdogTimer.current = null;
   }, []);
 
-  const enterWorkspace = useCallback(() => {
+  const enterUniverse = useCallback(() => {
     if (navigationStarted.current) return;
     navigationStarted.current = true;
     clearTransitionTimers();
-    rememberWorkspaceArrival();
-    router.push("/workspace");
+    rememberUniverseArrival();
+    router.push("/universe");
   }, [clearTransitionTimers, router]);
 
   useEffect(() => {
@@ -117,29 +117,29 @@ export function LandingExperience({ copy, quickLinks }: { copy: ReactNode; quick
   }, [sceneStatus]);
 
   useEffect(() => {
-    if (phase !== "idle" && sceneStatus === "fallback") enterWorkspace();
-  }, [enterWorkspace, phase, sceneStatus]);
+    if (phase !== "idle" && sceneStatus === "fallback") enterUniverse();
+  }, [enterUniverse, phase, sceneStatus]);
 
   useEffect(() => clearTransitionTimers, [clearTransitionTimers]);
 
   const handleEnter = (event: MouseEvent<HTMLAnchorElement>) => {
     if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
     if (sceneStatus !== "ready" || phase !== "idle") {
-      rememberWorkspaceArrival();
+      rememberUniverseArrival();
       return;
     }
     event.preventDefault();
     phaseRef.current = "opening";
     setPhase("opening");
     setAnnouncement("Opening DEV.OS. Skip intro is available.");
-    watchdogTimer.current = setTimeout(enterWorkspace, 3600);
+    watchdogTimer.current = setTimeout(enterUniverse, 3600);
   };
 
   const handleSkip = (event: MouseEvent<HTMLAnchorElement>) => {
     if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
     navigationStarted.current = true;
     clearTransitionTimers();
-    rememberWorkspaceArrival();
+    rememberUniverseArrival();
   };
 
   const handleOpenComplete = useCallback(() => {
@@ -170,9 +170,10 @@ export function LandingExperience({ copy, quickLinks }: { copy: ReactNode; quick
       <div className="relative z-10">
         {copy}
         <div className="mt-8 flex flex-wrap gap-3">
-          <Link href="/workspace" onClick={handleEnter} className={primaryAction}>Enter DEV.OS →</Link>
+          <Link href="/universe" onClick={handleEnter} className={primaryAction}>Enter DEV.OS universe →</Link>
           <Link href="/projects" className={secondaryAction}>Browse portfolio</Link>
-          <Link href="/workspace" onClick={handleSkip} className="inline-flex min-h-11 items-center rounded-md px-3 font-mono text-sm text-dev-accent underline-offset-4 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-dev-accent">Skip intro →</Link>
+          <Link href="/workspace" className={secondaryAction}>Quick View / 2D workspace</Link>
+          <Link href="/universe" onClick={handleSkip} className="inline-flex min-h-11 items-center rounded-md px-3 font-mono text-sm text-dev-accent underline-offset-4 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-dev-accent">Skip intro →</Link>
         </div>
         <div className="mt-5 text-sm text-dev-secondary">{quickLinks}</div>
         <p className="sr-only" role="status" aria-live="polite" aria-atomic="true">{announcement}</p>
@@ -198,7 +199,7 @@ export function LandingExperience({ copy, quickLinks }: { copy: ReactNode; quick
                 phase={scenePhase}
                 onReady={handleSceneReady}
                 onOpenComplete={handleOpenComplete}
-                onEnterComplete={enterWorkspace}
+                onEnterComplete={enterUniverse}
                 onError={handleSceneError}
               />
             </div>
