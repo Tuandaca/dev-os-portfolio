@@ -2,7 +2,7 @@
 
 ## Current phase
 
-Phase 4 cinematic laptop and boot experience implemented and verified locally (2026-11-01); `main` commit and push are pending. No deployment was performed.
+Phase 4 cinematic laptop and boot experience complete and synchronized on public `main` (2026-11-01). No deployment was performed.
 
 ## Completed features
 
@@ -18,7 +18,7 @@ Phase 4 cinematic laptop and boot experience implemented and verified locally (2
 
 ## Active task IDs
 
-- P4-04 integration, staged review, and Git synchronization.
+- None. Phase 5 release and evidence polish remain TODO.
 
 ## Decisions
 
@@ -70,6 +70,7 @@ Phase 4 cinematic laptop and boot experience implemented and verified locally (2
 - P3-S01 preflight: clean `codex/phase3-portfolio-content` at `e583f9e`; `gh auth status` confirms Tuandaca; `gh repo view` confirms public `Tuandaca/dev-os-portfolio` with default `main`; fresh `git fetch origin main` confirmed `origin/main` at `9f31975` is an ancestor of HEAD. The phase branches form a linear commit chain; no remote Phase 2/3 branch exists. User authorized publishing all verified work to `main` and using `main` as the working branch.
 - P3-S01 completed: local `main` fast-forwarded from `9f31975` to `1a37499` and pushed normally to verified `origin/main`. `git ls-remote` confirmed the remote `main` ref at `1a37499d5d90a6dff38a314cca419b6760d1b2f3`; local `main` tracked the same commit with a clean tree. Four fully merged local feature branch pointers were deleted; the remote lists only `main`. No force-push, remote branch deletion, or deployment occurred.
 - Phase 4 preflight: clean `main` at `0362d40a7b051f6c07225e9184c655d523b6efca`, matching `origin/main` and a fresh remote HEAD check. Backup scripts and `docs/BACKUP.md` are present; the scheduled task remains uninstalled by design. Installed React 19.3.1 and Three 0.173.0 satisfy npm peer ranges for Fiber 9.8.2 and Drei 10.7.9. A fresh production `npm audit` still reports one moderate Next and one high transitive PostCSS advisory; the suggested Next fix is a major-version upgrade, to review separately from Phase 4 scene integration.
+- Phase 4 checkpoint commit `b67a698` and verified implementation commit `b81c10399c3c61d5da53d7288cb32cd094b553b0` were pushed normally to the verified public `Tuandaca/dev-os-portfolio` `main`. A fresh fetch confirmed ancestry before push; `git ls-remote` confirmed `origin/main` at `b81c103`. Only local `main` is active, with a clean working tree after the implementation push. No force-push, deployment, or production-site change occurred.
 
 ## Blockers
 
@@ -81,4 +82,4 @@ Phase 4 cinematic laptop and boot experience implemented and verified locally (2
 
 ## Exact next action
 
-- Review the Phase 4 staged diff and secret scan, commit the verified implementation on `main`, fetch `origin/main` to confirm ancestry, and push without force. Then record the final remote commit and clean status. Do not deploy. Next milestone: evidence-led case-study polish and audit remediation before release.
+- Continue on `main` with Phase 5 evidence-led case-study polish and release review. Resolve the Next/PostCSS and Vitest/tinypool advisories before deployment or CI hardening; confirm remaining GymLVL/business contributions, reconcile the business v2 demo, and keep the Travel AI repository link withheld pending credential rotation and verification. No deployment is authorized by this checkpoint.
