@@ -2,7 +2,7 @@
 
 ## Current phase
 
-Phase 5A dependency hardening, content verification, and release review completed and synchronized to public `main` (2026-11-01). No deployment was performed.
+Phase 5B immersive 3D workspace MVP in progress (2026-11-01). Starting from clean `main` at `3d220fe8f76e781a91194a5295107910f76132b1`, matching `origin/main`; Phase 5A is complete. No deployment is authorized for this phase.
 
 ## Completed features
 
@@ -19,7 +19,7 @@ Phase 5A dependency hardening, content verification, and release review complete
 
 ## Active task IDs
 
-- None. Phase 5A implementation and synchronization tasks are complete; external Travel AI credential remediation remains an owner action before its repository link can be published.
+- P5B-00 architecture and art direction; P5B-01 verified skill interaction data; P5B-02 immersive scene; P5B-03 navigation and accessible UI; P5B-04 QA; P5B-05 integration and Git synchronization. External Travel AI remediation remains outside this phase.
 
 ## Decisions
 
@@ -86,4 +86,4 @@ Phase 5A dependency hardening, content verification, and release review complete
 
 ## Exact next action
 
-- Before Phase 5B, the owner should rotate/revoke potentially exposed Travel AI Neo4j and Google/Gemini credentials, inspect provider activity, and clean current public files; keep its DEV.OS repository link withheld until verified. Plan any subsequent DEV.OS work from clean `main`, prioritizing remaining dev-tool advisories and the owner-confirmed deployment URL before release metadata or deployment.
+- Complete P5B-00 scene/navigation contract and independent file assignments, then implement a first usable `/universe` spatial workspace with verified skill interactions. Keep `/workspace` as Quick View and recruiter routes direct. Run lifecycle, navigation, fallback, keyboard/mobile, regression, and production-build checks before committing and pushing only to verified `main`; do not deploy.
