@@ -2,7 +2,7 @@
 
 ## Current phase
 
-Phase 4 cinematic laptop and boot experience complete and synchronized on public `main` (2026-11-01). No deployment was performed.
+Phase 5A security, dependency hardening, content verification, and release readiness in progress (2026-11-01). Phase 4 remains synchronized on public `main`; no deployment was performed.
 
 ## Completed features
 
@@ -14,11 +14,11 @@ Phase 4 cinematic laptop and boot experience complete and synchronized on public
 - Phase 3 adds an allowlisted app registry and scoped Zustand store; a desktop with windows, taskbar, launcher, command palette, finite local terminal, desktop drag, mobile single-panel view, safe deep links, and HTML direct-route fallback. The landing page offers prominent workspace and recruiter paths. Apps reuse the CV-backed content modules.
 - The recruiter content pass renders all requested case-study sections in semantic HTML with source labels and explicit TODO gaps. Project pages use typed slugs and metadata; source/demo links appear only when verified data supplies them. About uses the CV's concrete architecture and review practices.
 - Four project studies now cover Cinema, the owner-confirmed Travel AI/Multimodal RAG identity, GymLVL, and grouped Business Website Projects. Gym/business are labeled public repository samples; unknown individual contributions and results remain explicit TODOs. The source ledger records pinned repository revisions and the v1/v2 demo distinction.
-- Phase 4 landing integration keeps the existing recruiter HTML and workspace routes, adds an immediately usable Skip link, a short boot overlay, lazy desktop scene, static mobile/reduced-motion/WebGL fallback, and one-time workspace heading focus after intro navigation. The 3D laptop uses self-authored procedural meshes without external assets; final visual tuning and full regression verification remain in progress.
+- Phase 4 landing integration keeps the existing recruiter HTML and workspace routes, adds an immediately usable Skip link, a short boot overlay, lazy desktop scene, static mobile/reduced-motion/WebGL fallback, and one-time workspace heading focus after intro navigation. The 3D laptop uses self-authored procedural meshes without external assets; visual and regression verification passed in the Phase 4 checkpoint.
 
 ## Active task IDs
 
-- None. Phase 5 release and evidence polish remain TODO.
+- P5A-01 dependency audit and safe upgrades; P5A-02 read-only Travel AI credential audit; P5A-03 project evidence review; P5A-04 release engineering review; P5A-05 full regression and security review; P5A-06 verified Git synchronization.
 
 ## Decisions
 
@@ -71,6 +71,7 @@ Phase 4 cinematic laptop and boot experience complete and synchronized on public
 - P3-S01 completed: local `main` fast-forwarded from `9f31975` to `1a37499` and pushed normally to verified `origin/main`. `git ls-remote` confirmed the remote `main` ref at `1a37499d5d90a6dff38a314cca419b6760d1b2f3`; local `main` tracked the same commit with a clean tree. Four fully merged local feature branch pointers were deleted; the remote lists only `main`. No force-push, remote branch deletion, or deployment occurred.
 - Phase 4 preflight: clean `main` at `0362d40a7b051f6c07225e9184c655d523b6efca`, matching `origin/main` and a fresh remote HEAD check. Backup scripts and `docs/BACKUP.md` are present; the scheduled task remains uninstalled by design. Installed React 19.3.1 and Three 0.173.0 satisfy npm peer ranges for Fiber 9.8.2 and Drei 10.7.9. A fresh production `npm audit` still reports one moderate Next and one high transitive PostCSS advisory; the suggested Next fix is a major-version upgrade, to review separately from Phase 4 scene integration.
 - Phase 4 checkpoint commit `b67a698` and verified implementation commit `b81c10399c3c61d5da53d7288cb32cd094b553b0` were pushed normally to the verified public `Tuandaca/dev-os-portfolio` `main`. A fresh fetch confirmed ancestry before push; `git ls-remote` confirmed `origin/main` at `b81c103`. Only local `main` is active, with a clean working tree after the implementation push. No force-push, deployment, or production-site change occurred.
+- Phase 5A preflight: clean `main` at `76f5ba15f6a51fa0bea0c5f6d426c14a81e22d13`, matching a fresh `origin/main` check. The Phase 4 cinematic/recruiter/workspace tests are present. Initial full `npm audit` reports 19 findings (16 moderate, one high, two critical); the critical paths are dev-only Vitest/tinypool, while `npm audit --omit=dev` previously reported Next/PostCSS production findings. No dependency or external repository has been changed yet.
 
 ## Blockers
 
@@ -82,4 +83,4 @@ Phase 4 cinematic laptop and boot experience complete and synchronized on public
 
 ## Exact next action
 
-- Continue on `main` with Phase 5 evidence-led case-study polish and release review. Resolve the Next/PostCSS and Vitest/tinypool advisories before deployment or CI hardening; confirm remaining GymLVL/business contributions, reconcile the business v2 demo, and keep the Travel AI repository link withheld pending credential rotation and verification. No deployment is authorized by this checkpoint.
+- Execute P5A-01 through P5A-05 with independent file ownership; resolve critical DEV.OS dependency findings where a compatible patch exists, document Travel AI remediation without changing that repository, verify project claims and release paths, then run full checks. Review staged diff and secrets before a coherent `main` commit and authorized push; do not deploy.
