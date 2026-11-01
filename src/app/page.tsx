@@ -56,6 +56,7 @@ export default function Home() {
           <div>
             <p className="font-mono text-xs uppercase tracking-[0.22em] text-dev-accent">01 / Selected work</p>
             <h2 id="projects-heading" className="mt-3 text-3xl font-semibold sm:text-4xl">Featured projects</h2>
+            <p className="mt-3 max-w-2xl leading-7 text-dev-secondary">Read the implementation evidence, decisions, and open questions behind each project.</p>
           </div>
           <Link href="/projects" className="font-mono text-sm text-dev-accent hover:underline focus-visible:underline">All projects →</Link>
         </div>

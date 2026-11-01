@@ -32,10 +32,11 @@ export function AboutContent() {
         </div>
       </div>
       <section className="dev-panel rounded-xl p-6 sm:p-8">
-        <h2 className="text-xl font-semibold">Software architecture in practice</h2>
+        <h2 className="text-xl font-semibold">Engineering approach</h2>
         <p className="mt-3 leading-8 text-dev-secondary">
-          At Van Lang University, the CV records Use Case, Class, and Sequence diagrams used to translate requirements into implementation tasks. The Cinema repository separates its Next.js web app from a NestJS API. These are concrete examples of system design work, alongside code review and testing.
+          The CV records Use Case, Class, and Sequence diagrams used to translate requirements into implementation tasks at Van Lang University. The Cinema repository separates its Next.js web app from a NestJS API. Those examples show how requirements and application boundaries are documented in practice.
         </p>
+        <p className="mt-4 leading-8 text-dev-secondary">{developmentPractice}</p>
       </section>
     </div>
   );
@@ -111,6 +112,8 @@ export function SkillsContent() {
 }
 
 function ProjectCard({ project }: { project: FeaturedProject }) {
+  const technologies = project.cvTechnologies.length ? project.cvTechnologies : project.codeTechnologies;
+
   return (
     <article className="dev-panel flex h-full flex-col rounded-xl p-6 sm:p-8">
       <p className="font-mono text-xs uppercase tracking-[0.18em] text-dev-accent">
@@ -118,13 +121,13 @@ function ProjectCard({ project }: { project: FeaturedProject }) {
       </p>
       <h3 className="mt-4 text-2xl font-semibold leading-snug">{project.title}</h3>
       <p className="mt-4 flex-1 leading-7 text-dev-secondary">{project.summary}</p>
-      <ul className="mt-6 flex flex-wrap gap-2" aria-label={`${project.title} CV technologies`}>
-        {project.cvTechnologies.slice(0, 5).map((technology) => (
+      <ul className="mt-6 flex flex-wrap gap-2" aria-label={`${project.title} technologies`}>
+        {technologies.slice(0, 5).map((technology) => (
           <li key={technology} className="rounded border border-dev-border-bright px-2.5 py-1 font-mono text-xs text-dev-muted">{technology}</li>
         ))}
       </ul>
       <div className="mt-7 flex flex-wrap gap-3">
-        <Link href={`/projects/${project.slug}`} className={secondaryActionClass}>Read case study →</Link>
+        <Link href={`/projects/${project.slug}`} className={secondaryActionClass} aria-label={`Read ${project.title} case study`}>Read case study →</Link>
         {project.repositoryUrl ? (
           <a href={project.repositoryUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center px-2 font-mono text-sm text-dev-accent hover:underline focus-visible:underline">Repository ↗</a>
         ) : null}
@@ -143,41 +146,106 @@ export function ProjectsContent() {
 }
 
 export function ProjectDetail({ project }: { project: FeaturedProject }) {
+  const sectionEntries = [
+    ["problem", "Problem"],
+    ["objectives", "Objectives"],
+    ["contributions", "My contributions"],
+    ["architecture", "Architecture"],
+    ["engineeringDecisions", "Engineering decisions"],
+    ["challenges", "Challenges"],
+    ["verifiedResults", "Verified results"],
+  ] as const;
+  const repositoryLinks = project.repositoryLinks ?? (project.repositoryUrl ? [{ label: "Repository", url: project.repositoryUrl }] : []);
+  const liveDemoLinks = project.liveDemoLinks ?? [];
+
   return (
     <div className="space-y-8">
       <section className="dev-panel rounded-xl p-6 sm:p-8">
-        <h2 className="text-2xl font-semibold">Overview</h2>
-        <p className="mt-4 text-lg leading-8 text-dev-secondary">{project.summary}</p>
+        <h2 className="text-2xl font-semibold">At a glance</h2>
+        <p className="mt-4 max-w-3xl text-lg leading-8 text-dev-secondary">{project.summary}</p>
         <p className="mt-5 font-mono text-sm text-dev-accent">{project.kind}{project.period ? ` · ${project.period}` : ""}</p>
       </section>
       <div className="grid gap-5 lg:grid-cols-2">
-        <section className="dev-panel rounded-xl p-6 sm:p-8">
-          <h2 className="text-xl font-semibold">Technologies listed in the CV</h2>
-          <ul className="mt-5 flex flex-wrap gap-2">
-            {project.cvTechnologies.map((technology) => <li key={technology} className="rounded border border-dev-border-bright px-3 py-1.5 font-mono text-xs text-dev-secondary">{technology}</li>)}
-          </ul>
-        </section>
-        <section className="dev-panel rounded-xl p-6 sm:p-8">
-          <h2 className="text-xl font-semibold">Technologies visible in code</h2>
-          <ul className="mt-5 flex flex-wrap gap-2">
-            {project.codeTechnologies.map((technology) => <li key={technology} className="rounded border border-dev-border-bright px-3 py-1.5 font-mono text-xs text-dev-secondary">{technology}</li>)}
-          </ul>
-        </section>
+        {sectionEntries.slice(0, 2).map(([key, title]) => (
+          <CaseStudySection key={key} id={`${project.slug}-${key}`} title={title} section={project.caseStudy[key]} />
+        ))}
       </div>
-      <section className="dev-panel rounded-xl p-6 sm:p-8">
-        <h2 className="text-2xl font-semibold">Engineering notes</h2>
-        <ul className="mt-6 space-y-5">
-          {project.highlights.map(({ text, source }) => (
-            <li key={text} className="border-l-2 border-dev-border-bright pl-4">
-              <span className="font-mono text-xs uppercase tracking-widest text-dev-accent">{source}</span>
-              <p className="mt-1 leading-7 text-dev-secondary">{text}</p>
+      <CaseStudySection id={`${project.slug}-contributions`} title="My contributions" section={project.caseStudy.contributions} />
+      <CaseStudySection id={`${project.slug}-architecture`} title="Architecture" section={project.caseStudy.architecture} />
+      <section aria-labelledby={`${project.slug}-stack`} className="dev-panel rounded-xl p-6 sm:p-8">
+        <h2 id={`${project.slug}-stack`} className="text-xl font-semibold">Technology stack</h2>
+        <div className="mt-5 grid gap-6 md:grid-cols-2">
+          <TechnologyList title="Listed in the CV" technologies={project.cvTechnologies} />
+          <TechnologyList title="Visible in repository code" technologies={project.codeTechnologies} />
+        </div>
+      </section>
+      <div className="grid gap-5 lg:grid-cols-2">
+        {sectionEntries.slice(4).map(([key, title]) => (
+          <CaseStudySection key={key} id={`${project.slug}-${key}`} title={title} section={project.caseStudy[key]} />
+        ))}
+      </div>
+      <section aria-labelledby={`${project.slug}-sources`} className="dev-panel rounded-xl p-6 sm:p-8">
+        <h2 id={`${project.slug}-sources`} className="text-xl font-semibold">Source and live demo</h2>
+        <div className="mt-5 grid gap-5 sm:grid-cols-2">
+          <div>
+            <h3 className="font-mono text-sm font-medium text-dev-text">Source</h3>
+            {repositoryLinks.length ? (
+              <ul className="mt-3 space-y-2">
+                {repositoryLinks.map((link) => <li key={link.url}><a href={link.url} target="_blank" rel="noopener noreferrer" className="text-dev-accent underline underline-offset-4 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-dev-accent">{link.label} ↗</a></li>)}
+              </ul>
+            ) : <p className="mt-3 text-sm leading-6 text-dev-secondary"><span className="font-mono text-dev-amber">TODO</span> · No repository link is approved for this page.</p>}
+          </div>
+          <div>
+            <h3 className="font-mono text-sm font-medium text-dev-text">Live demo</h3>
+            {liveDemoLinks.length ? (
+              <ul className="mt-3 space-y-2">
+                {liveDemoLinks.map((link) => <li key={link.url}><a href={link.url} target="_blank" rel="noopener noreferrer" className="text-dev-accent underline underline-offset-4 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-dev-accent">{link.label} ↗</a></li>)}
+              </ul>
+            ) : <p className="mt-3 text-sm leading-6 text-dev-secondary"><span className="font-mono text-dev-amber">TODO</span> · A public live demo has not been verified.</p>}
+          </div>
+        </div>
+      </section>
+    </div>
+  );
+}
+
+function CaseStudySection({
+  id,
+  title,
+  section,
+}: {
+  id: string;
+  title: string;
+  section: FeaturedProject["caseStudy"]["problem"];
+}) {
+  return (
+    <section aria-labelledby={id} className="dev-panel rounded-xl p-6 sm:p-8">
+      <h2 id={id} className="text-xl font-semibold">{title}</h2>
+      {section.status === "verified" ? (
+        <ul className="mt-5 list-disc space-y-3 pl-5 leading-7 text-dev-secondary marker:text-dev-accent">
+          {section.items.map((item) => (
+            <li key={item.text}>
+              <span>{item.text}</span>
+              <span className="ml-2 whitespace-nowrap font-mono text-xs text-dev-muted">[{item.source}]</span>
             </li>
           ))}
         </ul>
-      </section>
-      {project.repositoryUrl ? (
-        <a href={project.repositoryUrl} target="_blank" rel="noopener noreferrer" className={secondaryActionClass}>View repository ↗</a>
-      ) : null}
+      ) : (
+        <p className="mt-5 text-sm leading-7 text-dev-secondary"><span className="font-mono font-semibold text-dev-amber">TODO</span> · {section.note}</p>
+      )}
+    </section>
+  );
+}
+
+function TechnologyList({ title, technologies }: { title: string; technologies: readonly string[] }) {
+  return (
+    <div>
+      <h3 className="font-mono text-sm font-medium text-dev-text">{title}</h3>
+      {technologies.length ? (
+        <ul className="mt-3 flex flex-wrap gap-2">
+          {technologies.map((technology) => <li key={technology} className="rounded border border-dev-border-bright px-3 py-1.5 font-mono text-xs text-dev-secondary">{technology}</li>)}
+        </ul>
+      ) : <p className="mt-3 text-sm text-dev-secondary"><span className="font-mono text-dev-amber">TODO</span> · Not established by this source.</p>}
     </div>
   );
 }

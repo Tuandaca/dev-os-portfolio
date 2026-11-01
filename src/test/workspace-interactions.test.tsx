@@ -40,7 +40,7 @@ describe("DEV.OS workspace interactions", () => {
   it("keeps the Travel AI repository link withheld in the workspace", () => {
     render(<Desktop initialSelection={{ appId: "projects", projectSlug: "travel-ai" }} />);
     const projectWindow = screen.getByRole("region", { name: "Projects" });
-    expect(projectWindow).toHaveTextContent("Travel AI — RAG & Knowledge Graph QA");
+    expect(projectWindow).toHaveTextContent("Travel AI");
     expect(within(projectWindow).queryByRole("link", { name: /View repository/ })).not.toBeInTheDocument();
   });
 

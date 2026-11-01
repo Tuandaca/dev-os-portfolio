@@ -2,7 +2,7 @@
 
 ## Current phase
 
-Phase 2 accepted; Phase 3 core workspace complete locally (2026-11-01).
+Phase 3 recruiter content and case studies complete locally (2026-11-01). The core workspace remains complete locally.
 
 ## Completed features
 
@@ -12,10 +12,12 @@ Phase 2 accepted; Phase 3 core workspace complete locally (2026-11-01).
 - Phase 2 CV-based profile, dated work roles, skills, education, certification, and two sourced project case studies are in `src/content/`. Recruiter pages and a lightweight workspace view use these modules; the legacy data file remains unused.
 - Phase 2 design specifications cover route and state boundaries, landing/boot/workspace/recruiter flows, content provenance, accessibility, reduced motion, WebGL fallback, and later milestones. CSS/Tailwind tokens and five semantic UI primitives are in place; no full OS or scene was added.
 - Phase 3 adds an allowlisted app registry and scoped Zustand store; a desktop with windows, taskbar, launcher, command palette, finite local terminal, desktop drag, mobile single-panel view, safe deep links, and HTML direct-route fallback. The landing page offers prominent workspace and recruiter paths. Apps reuse the CV-backed content modules.
+- The recruiter content pass renders all requested case-study sections in semantic HTML with source labels and explicit TODO gaps. Project pages use typed slugs and metadata; source/demo links appear only when verified data supplies them. About uses the CV's concrete architecture and review practices.
+- Four project studies now cover Cinema, the owner-confirmed Travel AI/Multimodal RAG identity, GymLVL, and grouped Business Website Projects. Gym/business are labeled public repository samples; unknown individual contributions and results remain explicit TODOs. The source ledger records pinned repository revisions and the v1/v2 demo distinction.
 
 ## Active task IDs
 
-- None. Phase 4 optional cinematic scene and Phase 5 case-study work remain TODO.
+- None. Phase 4 optional cinematic work remains TODO.
 
 ## Decisions
 
@@ -25,6 +27,8 @@ Phase 2 accepted; Phase 3 core workspace complete locally (2026-11-01).
 - Use the supplied one-page CV as the baseline for owner identity, experience, skills, education, and certification. Keep its two years of hands-on project experience distinct from employment dates.
 - The owner approved publishing the original CV including its contact details. Do not substitute legacy contact data.
 - The Travel AI repository has apparent exposed credentials. Keep its project link off the website until owner review and credential rotation; present safe CV and code facts without quoting secrets.
+- The owner confirmed that “Multimodal RAG Q&A System” names the same project as the CV's Travel AI capstone. This confirms identity, not a multimodal retrieval implementation.
+- The existing `tuandacadev.vercel.app` portfolio returned HTTP 200, but it is not verified as the DEV.OS deployment. Keep page-specific SEO titles/descriptions and Open Graph metadata; defer canonical URLs and a deployment sitemap until the DEV.OS public URL is known.
 - Keep recruiter routes server-rendered and directly addressable. Treat the workspace and cinematic scene as progressive enhancements over the same typed content.
 - Defer R3F, Drei, React Flow, MDX, GSAP, and any Motion package migration until their corresponding implementation needs. Playwright was added for Phase 3 browser behavior. React 19.3.1 and Three 0.173.0 fit the checked Fiber 9.8.2/Drei 10.7.9 peer ranges; install-time verification is still required.
 
@@ -39,6 +43,9 @@ Phase 2 accepted; Phase 3 core workspace complete locally (2026-11-01).
 - Phase 2 design integration: `npm run lint`, `npm run typecheck`, and `npm run build` passed; build generated 13 static pages including both project slugs. `git diff --check` passed. `npm test` found no test files and exited 1; no behavior tests were added for design-only primitives.
 - Phase 3: `npm run lint`, `npm run typecheck`, `npm test` (12 passing), `npm run test:e2e` (6 passing after the final drag change), and `npm run build` passed. Browser checks cover landing, deep links, keyboard navigation, mobile/history, no-JavaScript fallback, and bounded drag. `/workspace` is server-rendered on demand; recruiter routes and project slugs remain prerendered. Independent QA found no Phase 3 blocker.
 - P3-01 registry/store parser and transition tests passed (5). P3-03 terminal parser tests passed (3). P3-04 CV-backed adapter passed typecheck and targeted lint; no Travel URL was added. QA interaction tests passed (4), including launcher focus, window restore, project links, and Travel link withholding. Phase 2 primitives remain semantic wrappers; markup-only unit tests would add little value.
+- The website PDF hash `2F7154E6…F10880A` matches the supplied English CV byte-for-byte. GitHub profile and existing portfolio URLs returned HTTP 200. Email and telephone remain CV-supplied values, not delivery-tested. Business v1's repository-listed demo returned HTTP 200 with a matching business-site title.
+- Recruiter QA passed two content invariants and five browser journeys: seven main routes, navigation, four slugs with nine headings, unknown-slug 404, Travel/v2 link withholding, Gym TODO labels, PDF download event and SHA256, and 320px overflow checks. No implementation blocker reported.
+- Full integration: `npm run lint`, `npm run typecheck`, `npm test` (14 passing across five files), `npm run test:e2e` (11 passing across recruiter and workspace journeys), and `npm run build` passed. The build generated 15 static pages, including Cinema, Travel AI, GymLVL, and Business Websites; `/workspace` remains server-rendered on demand.
 
 ## Git state
 
@@ -51,13 +58,16 @@ Phase 2 accepted; Phase 3 core workspace complete locally (2026-11-01).
 - Phase 2 audit confirmed clean `46e1d65`, the approved tokens/primitives/routes, and no Phase 2 scope drift. `gh auth status` confirms Tuandaca; `gh repo view` confirms the public `Tuandaca/dev-os-portfolio` repository with default `main`. Only local `main` tracks `origin/main`; the new `codex/phase3-core` branch has no upstream. No push or merge is authorized for this audit.
 - Current branch `codex/phase3-core` starts at `46e1d65` and has no upstream. The local Phase 3 commit is titled `feat: build DEV.OS core workspace`; neither Phase 2 nor Phase 3 branches were pushed or merged. Verified remote `main` remains `9f319750583faa62f9a1e3eb56fb35376fb45418` at the public `Tuandaca/dev-os-portfolio` repository.
 - A local docs checkpoint titled `docs: record Phase 3 browser verification` records the full six-test browser rerun after the workspace commit; it has no remote push.
+- Recruiter content work starts from clean local `codex/phase3-portfolio-content` at `e7f4880`. No push, merge, or deployment is planned in this checkpoint.
+- The recruiter content phase is recorded in a local commit titled `feat: complete sourced recruiter portfolio`; this branch has no upstream and has not been pushed, merged, or deployed.
 
 ## Blockers
 
 - No blocker to Phase 1 completion. Automatic approval review rejected recursive cleanup of a disposable test fixture at `C:\Users\tuand\AppData\Local\Temp\devos_phase1_test_f851c0c5b55c4c279504c560defd3bf8` despite path verification; it remains outside the repository. Reparse-point path bypasses, retention validation, and task uninstall identity gaps were fixed and retested.
 - The public Travel AI repository appears to expose Neo4j credentials. Do not quote or copy them; the owner should rotate any live credential and review public history. The new site can present the case study without a prominent repository link while this remains unresolved.
 - Current production dependency audit reports one moderate Next and one high PostCSS advisory; the suggested fix upgrades Next to 16.4.3 (major). Review separately before release; no unrelated dependency migration was made during Phase 3.
+- Business v2's listed demo returned HTTP 200 but displayed a mechanical-keyboard site that does not match its current generic business landing source; withhold that demo link pending reconciliation.
 
 ## Exact next action
 
-- Review the local Phase 3 commit, then begin P4-01's optional cinematic laptop with a static fallback and performance budget. Keep the Travel AI repository link withheld until credential rotation and verification; review the Next/PostCSS advisories before release.
+- Review the local recruiter-content commit. Confirm missing GymLVL and business-site individual contributions if those TODO sections should become claims; reconcile the business v2 demo before linking it. Keep the Travel AI repository link withheld until credential rotation and verification. Begin optional Phase 4 WebGL only after this functional portfolio checkpoint is accepted.

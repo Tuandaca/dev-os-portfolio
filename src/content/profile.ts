@@ -1,7 +1,7 @@
-/** Owner details are sourced from the supplied CV; see docs/CONTENT_SOURCE.md. */
+/** CV baseline with owner-confirmed display headline; see docs/CONTENT_SOURCE.md. */
 export const profile = {
   name: "Ngo Anh Tuan",
-  headline: "Full-Stack Developer | Software Engineer",
+  headline: "Fullstack Software Engineer / AI-Assisted Developer",
   location: "Ho Chi Minh City, Vietnam",
   experienceContext: "2 years of hands-on, project-based experience",
   summary:
